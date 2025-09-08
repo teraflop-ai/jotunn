@@ -35,13 +35,15 @@ def create_laion_aesthetic_udf(
         ):
             self.device = device
 
-            self.clip_processor = CLIPProcessor.from_pretrained(clip_model_name, use_fast=True)
+            self.clip_processor = CLIPProcessor.from_pretrained(
+                clip_model_name, use_fast=True
+            )
             self.clip_model = CLIPVisionModelWithProjection.from_pretrained(
                 clip_model_name
             )
             self.clip_model.to(self.device)
             self.clip_model.eval()
-            
+
             self.score_model = MLP()
             self.score_model.load_state_dict(
                 torch.hub.load_state_dict_from_url(
@@ -59,7 +61,9 @@ def create_laion_aesthetic_udf(
 
             with torch.no_grad():
                 embed = self.clip_model(**inputs).image_embeds
-                normalize_embeds = embed / torch.linalg.vector_norm(embed, dim=-1, keepdim=True)
+                normalize_embeds = embed / torch.linalg.vector_norm(
+                    embed, dim=-1, keepdim=True
+                )
                 scores = self.score_model(normalize_embeds)
             scores = [pred.item() for pred in scores]
             return scores

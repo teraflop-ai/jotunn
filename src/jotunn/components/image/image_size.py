@@ -1,8 +1,6 @@
 from typing import Optional
 
-import cv2
 import daft
-import numpy as np
 from daft import DataType
 
 from jotunn.components.base import ScoreFilter

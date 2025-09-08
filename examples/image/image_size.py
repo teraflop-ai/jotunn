@@ -1,7 +1,7 @@
 import daft
 from daft import col
 
-from jotunn.components.image.aesthetic import LaionAestheticClassifier
+from jotunn.components.image.image_size import ImageSize
 
 df = daft.from_pydict(
     {
@@ -11,17 +11,12 @@ df = daft.from_pydict(
             "https://live.staticflickr.com/65535/53670606332_1ea5f2ce68_o.jpg",
             "https://live.staticflickr.com/65535/53671838039_b97411a441_o.jpg",
             "https://live.staticflickr.com/65535/53671698613_0230f8af3c_o.jpg",
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxNcZf5QCNIARnmYAmWfTso4_OkQ1WB_L0mQ&s",
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQdJcekXmVj22d55ETnKABLMSckfVnaOAHEw&s",
         ],
     }
 )
 
-classifier = LaionAestheticClassifier(
-    input_column="image", batch_size=8, concurrency=1, num_cpus=6, num_gpus=1
-)
+image_size_filter = ImageSize(input_column="image_bytes")
 
 df = df.with_column("image_bytes", col("urls").url.download(on_error="null"))
-df = df.with_column("image", col("image_bytes").image.decode())
-df = classifier(df)
+df = image_size_filter(df)
 df.show()
