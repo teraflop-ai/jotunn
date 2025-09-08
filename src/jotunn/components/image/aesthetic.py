@@ -9,8 +9,8 @@ from transformers import (
     CLIPVisionModelWithProjection,
 )
 
-from teraflopai_data.components.distributed_base import Distributed
-from teraflopai_data.models.laion import MLP
+from jotunn.components.distributed_base import Distributed
+from jotunn.models.laion import MLP
 
 
 def create_laion_aesthetic_udf(

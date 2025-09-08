@@ -1,9 +1,9 @@
 import daft
 from daft import col
 
-from teraflopai_data.components.image.image_hashing import ImageHasher
-from teraflopai_data.components.image.nsfw import FalconsNSFWClassifier
-from teraflopai_data.pipeline import Pipeline
+from jotunn.components.image.image_hashing import ImageHasher
+from jotunn.components.image.nsfw import FalconsNSFWClassifier
+from jotunn.pipeline import Pipeline
 
 df = daft.from_pydict(
     {

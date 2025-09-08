@@ -1,6 +1,6 @@
 import daft
 
-from teraflopai_data.components.text.fineweb_edu import FinewebEduClassifier
+from jotunn.components.text.fineweb_edu import FinewebEduClassifier
 
 df = daft.from_pydict(
     {

@@ -1,7 +1,7 @@
 import daft
 from daft import col
 
-from teraflopai_data.components.image.nsfw import FalconsNSFWClassifier
+from jotunn.components.image.nsfw import FalconsNSFWClassifier
 
 df = daft.from_pydict(
     {

@@ -1,7 +1,7 @@
 import daft
 from daft import col
 
-from teraflopai_data.components.image.caption import VllmImageCaption
+from jotunn.components.image.caption import VllmImageCaption
 
 df = daft.from_pydict(
     {

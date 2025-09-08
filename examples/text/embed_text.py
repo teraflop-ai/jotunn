@@ -1,6 +1,6 @@
 import daft
 
-from teraflopai_data.components.text.embedding import SentenceTransformersEmbed
+from jotunn.components.text.embedding import SentenceTransformersEmbed
 
 df = daft.from_pydict(
     {

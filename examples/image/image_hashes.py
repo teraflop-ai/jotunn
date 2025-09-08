@@ -1,7 +1,7 @@
 import daft
 from daft import col
 
-from teraflopai_data.components.image.image_hashing import ImageHasher
+from jotunn.components.image.image_hashing import ImageHasher
 
 df = daft.from_pydict(
     {

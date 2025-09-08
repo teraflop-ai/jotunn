@@ -1,8 +1,8 @@
 import daft
 
-from teraflopai_data.components.text.embedding import SentenceTransformersEmbed
-from teraflopai_data.components.text.fineweb_edu import FinewebEduClassifier
-from teraflopai_data.pipeline import Pipeline
+from jotunn.components.text.embedding import SentenceTransformersEmbed
+from jotunn.components.text.fineweb_edu import FinewebEduClassifier
+from jotunn.pipeline import Pipeline
 
 df = daft.from_pydict(
     {

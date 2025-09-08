@@ -6,7 +6,7 @@ import torch
 from daft import DataType
 from loguru import logger
 
-from teraflopai_data.components.distributed_base import Distributed
+from jotunn.components.distributed_base import Distributed
 
 
 def create_sentence_transformer_udf(

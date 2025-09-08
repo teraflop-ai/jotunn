@@ -1,21 +1,21 @@
-# teraflopai-data
+# Jotunn
 
 A petabyte scale data processing framework for AI models using Daft + Ray.
 
 ## Installation
 ```python
-uv pip install teraflopai-data
+uv pip install jotunn
 ```
 Install specific multimodal components
 ```python
 # Image
-uv pip install teraflopai-data[image]
+uv pip install jotunn[image]
 
 # Text
-uv pip install teraflopai-data[text]
+uv pip install jotunn[text]
 
 # Everything
-uv pip install teraflopai-data[all]
+uv pip install jotunn[all]
 ```
 
 ## Community
@@ -27,9 +27,9 @@ uv pip install teraflopai-data[all]
 ```python
 import daft
 
-from teraflopai_data.components.text.embedding import SentenceTransformersEmbed
-from teraflopai_data.components.text.fineweb_edu import FinewebEduClassifier
-from teraflopai_data.pipeline import Pipeline
+from jotunn.components.text.embedding import SentenceTransformersEmbed
+from jotunn.components.text.fineweb_edu import FinewebEduClassifier
+from jotunn.pipeline import Pipeline
 
 df = daft.from_pydict(
     {
@@ -71,7 +71,7 @@ df.show()
 ```python
 import daft
 
-from teraflopai_data.components.text.fineweb_edu import FinewebEduClassifier
+from jotunn.components.text.fineweb_edu import FinewebEduClassifier
 
 df = daft.from_pydict(
     {
@@ -100,7 +100,7 @@ df.show()
 import daft
 from daft import col
 
-from teraflopai_data.components.image.image_hashing import ImageHasher
+from jotunn.components.image.image_hashing import ImageHasher
 
 df = daft.from_pydict(
     {
@@ -126,4 +126,13 @@ df = df.with_column("image", col("image_bytes").image.decode())
 df = hasher(df)
 df = df.drop_duplicates("image_hash")
 df.show()
+```
+
+## Citation
+```bibtex
+@misc{shippole2025jotunn,
+    title   = {Jotunn: Distributed Petabyte Multimodal Data Processing},
+    author  = {Enrico Shippole},
+    year    = {2025},
+}
 ```

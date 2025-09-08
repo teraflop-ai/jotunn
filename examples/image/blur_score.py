@@ -1,7 +1,7 @@
 import daft
 from daft import col
 
-from teraflopai_data.components.image.blur import Blur
+from jotunn.components.image.blur import Blur
 
 df = daft.from_pydict(
     {

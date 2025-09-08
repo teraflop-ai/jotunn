@@ -1,7 +1,7 @@
 import daft
 from daft import col
 
-from teraflopai_data.components.image.watermark import OwlWatermarkClassifier
+from jotunn.components.image.watermark import OwlWatermarkClassifier
 
 df = daft.from_pydict(
     {

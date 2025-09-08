@@ -1,7 +1,7 @@
 import daft
 from daft import col
 
-from teraflopai_data.components.image.aesthetic import LaionAestheticClassifier
+from jotunn.components.image.aesthetic import LaionAestheticClassifier
 
 df = daft.from_pydict(
     {

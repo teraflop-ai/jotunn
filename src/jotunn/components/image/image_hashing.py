@@ -5,7 +5,7 @@ import daft
 import imagehash
 from PIL import Image
 
-from teraflopai_data.components.distributed_base import Distributed
+from jotunn.components.distributed_base import Distributed
 
 
 class HashingAlgorithm(str, Enum):

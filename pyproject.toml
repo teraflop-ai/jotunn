@@ -1,6 +1,6 @@
 [project]
-name = "teraflopai-data"
-version = "0.1.1"
+name = "jotunn"
+version = "0.1.0"
 description = "A petabyte scale data processing framework for AI models using Ray."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -44,7 +44,7 @@ image = [
     "vllm>=0.9.2",
 ]
 all = [
-    "teraflopai-data[text,audio,video,image]",
+    "jotunn[text,audio,video,image]",
 ]
 
 [tool.uv]
