@@ -1,7 +1,7 @@
 import daft
 from daft import col
 
-from jotunn.components.image.clarity import Clarity
+from jotunn.components.image.resolution import Resolution
 
 df = daft.from_pydict(
     {
@@ -15,9 +15,9 @@ df = daft.from_pydict(
     }
 )
 
-clarity_filter = Clarity(input_column="image")
+resolution_filter = Resolution(input_column="image", threshold=256)
 
 df = df.with_column("image_bytes", col("urls").url.download(on_error="null"))
 df = df.with_column("image", col("image_bytes").image.decode())
-df = clarity_filter(df)
+df = resolution_filter(df)
 df.show()
