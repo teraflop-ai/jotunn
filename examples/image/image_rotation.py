@@ -12,7 +12,7 @@ df = daft.from_pydict(
             "https://live.staticflickr.com/65535/53671838039_b97411a441_o.jpg",
             "https://live.staticflickr.com/65535/53671698613_0230f8af3c_o.jpg",
             "https://github.com/ianare/exif-samples/blob/master/jpg/Kodak_CX7530.jpg?raw=true",
-            "https://github.com/ianare/exif-samples/blob/master/jpg/Canon_40D_photoshop_import.jpg?raw=true"
+            "https://github.com/ianare/exif-samples/blob/master/jpg/Canon_40D_photoshop_import.jpg?raw=true",
         ],
     }
 )

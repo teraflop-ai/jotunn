@@ -1,9 +1,10 @@
+from io import BytesIO
 from typing import Optional
 
 import daft
-from daft import DataType
-from io import BytesIO
 import exifread
+from daft import DataType
+
 from jotunn.components.base import ScoreFilter
 
 
@@ -24,14 +25,13 @@ class Rotation(ScoreFilter):
 
     def _score(self, image: bytes) -> int:
         tags = exifread.process_file(BytesIO(image))
-        if 'Image Orientation' in tags:
-            orientation = tags['Image Orientation'].values[0]
+        if "Image Orientation" in tags:
+            orientation = tags["Image Orientation"].values[0]
             return orientation
-        return -1
+        return 0
 
     def _filter(self, df: daft.DataFrame, threshold: int) -> daft.DataFrame:
         df = df.where(
-            (df[self.output_column] == threshold)
-            | (df[self.output_column] == -1)
+            (df[self.output_column] == threshold) | (df[self.output_column] == 0)
         )
         return df
