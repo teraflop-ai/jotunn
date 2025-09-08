@@ -131,7 +131,7 @@ df.show()
 ## Citation
 ```bibtex
 @misc{shippole2025jotunn,
-    title   = {Jotunn: Distributed Petabyte Multimodal Data Processing},
+    title   = {Jotunn: Distributed Multimodal Data Processing at Petabyte Scale},
     author  = {Enrico Shippole},
     year    = {2025},
 }
