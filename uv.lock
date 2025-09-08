@@ -733,6 +733,15 @@ wheels = [
 ]
 
 [[package]]
+name = "exifread"
+version = "3.5.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/e2/4e/d8fce8810d819db47f5b159e75223511c5ccd7ad07c2feca64cf7fab2477/exifread-3.5.1.tar.gz", hash = "sha256:9f998f80d3062741c976dfc4fd033424bc40932937994e4d2181eb70c4b6aedd", size = 56552 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e2/a3/20e34a55c7b225110d3822d07c3cab9e8653d9c179e36783f2ed632a96a7/exifread-3.5.1-py3-none-any.whl", hash = "sha256:e5426ce2857423ad401e575ea9d159dc97449dc041fb6e61b35109caea72c311", size = 59742 },
+]
+
+[[package]]
 name = "fastapi"
 version = "0.116.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1276,6 +1285,77 @@ sdist = { url = "https://files.pythonhosted.org/packages/e8/5d/447af5ea094b9e4c4
 wheels = [
     { url = "https://files.pythonhosted.org/packages/1e/e8/685f47e0d754320684db4425a0967f7d3fa70126bffd76110b7009a0090f/joblib-1.5.2-py3-none-any.whl", hash = "sha256:4e1f0bdbb987e6d843c70cf43714cb276623def372df3c22fe5266b2670bc241", size = 308396 },
 ]
+
+[[package]]
+name = "jotunn"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "daft", extra = ["lance", "ray"] },
+    { name = "loguru" },
+    { name = "ray", extra = ["data"] },
+    { name = "transformers" },
+]
+
+[package.optional-dependencies]
+all = [
+    { name = "av" },
+    { name = "chonkie" },
+    { name = "exifread" },
+    { name = "imagehash" },
+    { name = "opencv-python" },
+    { name = "pillow-simd" },
+    { name = "scenedetect" },
+    { name = "sentence-transformers" },
+    { name = "silero-vad" },
+    { name = "trafilatura" },
+    { name = "vllm" },
+    { name = "warcio" },
+]
+audio = [
+    { name = "silero-vad" },
+]
+image = [
+    { name = "exifread" },
+    { name = "imagehash" },
+    { name = "opencv-python" },
+    { name = "pillow-simd" },
+    { name = "vllm" },
+]
+text = [
+    { name = "chonkie" },
+    { name = "sentence-transformers" },
+    { name = "trafilatura" },
+    { name = "vllm" },
+    { name = "warcio" },
+]
+video = [
+    { name = "av" },
+    { name = "scenedetect" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "av", marker = "extra == 'video'", specifier = ">=15.1.0" },
+    { name = "chonkie", marker = "extra == 'text'", specifier = ">=1.1.0" },
+    { name = "daft", extras = ["lance", "ray"], specifier = ">=0.5.22" },
+    { name = "exifread", marker = "extra == 'image'", specifier = ">=3.5.1" },
+    { name = "imagehash", marker = "extra == 'image'", specifier = ">=4.3.2" },
+    { name = "jotunn", extras = ["text", "audio", "video", "image"], marker = "extra == 'all'" },
+    { name = "loguru", specifier = ">=0.7.3" },
+    { name = "opencv-python", marker = "extra == 'image'", specifier = ">=4.12.0.88" },
+    { name = "pillow-simd", marker = "extra == 'image'", specifier = ">=9.5.0.post2" },
+    { name = "ray", extras = ["data"], specifier = ">=2.47.1" },
+    { name = "scenedetect", marker = "extra == 'video'", specifier = ">=0.6.6" },
+    { name = "sentence-transformers", marker = "extra == 'text'", specifier = ">=5.0.0" },
+    { name = "silero-vad", marker = "extra == 'audio'", specifier = ">=5.1.2" },
+    { name = "trafilatura", marker = "extra == 'text'", specifier = ">=2.0.0" },
+    { name = "transformers", specifier = "<4.54.0" },
+    { name = "vllm", marker = "extra == 'image'", specifier = ">=0.9.2" },
+    { name = "vllm", marker = "extra == 'text'", specifier = ">=0.9.2" },
+    { name = "warcio", marker = "extra == 'text'", specifier = ">=1.7.5" },
+]
+provides-extras = ["text", "audio", "video", "image", "all"]
 
 [[package]]
 name = "jsonschema"
@@ -4093,74 +4173,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/83/d3/803453b36afefb7c2
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a2/09/77d55d46fd61b4a135c444fc97158ef34a095e5681d0a6c10b75bf356191/sympy-1.14.0-py3-none-any.whl", hash = "sha256:e091cc3e99d2141a0ba2847328f5479b05d94a6635cb96148ccb3f34671bd8f5", size = 6299353 },
 ]
-
-[[package]]
-name = "teraflopai-data"
-version = "0.1.1"
-source = { editable = "." }
-dependencies = [
-    { name = "daft", extra = ["lance", "ray"] },
-    { name = "loguru" },
-    { name = "ray", extra = ["data"] },
-    { name = "transformers" },
-]
-
-[package.optional-dependencies]
-all = [
-    { name = "av" },
-    { name = "chonkie" },
-    { name = "imagehash" },
-    { name = "opencv-python" },
-    { name = "pillow-simd" },
-    { name = "scenedetect" },
-    { name = "sentence-transformers" },
-    { name = "silero-vad" },
-    { name = "trafilatura" },
-    { name = "vllm" },
-    { name = "warcio" },
-]
-audio = [
-    { name = "silero-vad" },
-]
-image = [
-    { name = "imagehash" },
-    { name = "opencv-python" },
-    { name = "pillow-simd" },
-    { name = "vllm" },
-]
-text = [
-    { name = "chonkie" },
-    { name = "sentence-transformers" },
-    { name = "trafilatura" },
-    { name = "vllm" },
-    { name = "warcio" },
-]
-video = [
-    { name = "av" },
-    { name = "scenedetect" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "av", marker = "extra == 'video'", specifier = ">=15.1.0" },
-    { name = "chonkie", marker = "extra == 'text'", specifier = ">=1.1.0" },
-    { name = "daft", extras = ["lance", "ray"], specifier = ">=0.5.22" },
-    { name = "imagehash", marker = "extra == 'image'", specifier = ">=4.3.2" },
-    { name = "loguru", specifier = ">=0.7.3" },
-    { name = "opencv-python", marker = "extra == 'image'", specifier = ">=4.12.0.88" },
-    { name = "pillow-simd", marker = "extra == 'image'", specifier = ">=9.5.0.post2" },
-    { name = "ray", extras = ["data"], specifier = ">=2.47.1" },
-    { name = "scenedetect", marker = "extra == 'video'", specifier = ">=0.6.6" },
-    { name = "sentence-transformers", marker = "extra == 'text'", specifier = ">=5.0.0" },
-    { name = "silero-vad", marker = "extra == 'audio'", specifier = ">=5.1.2" },
-    { name = "teraflopai-data", extras = ["text", "audio", "video", "image"], marker = "extra == 'all'" },
-    { name = "trafilatura", marker = "extra == 'text'", specifier = ">=2.0.0" },
-    { name = "transformers", specifier = "<4.54.0" },
-    { name = "vllm", marker = "extra == 'image'", specifier = ">=0.9.2" },
-    { name = "vllm", marker = "extra == 'text'", specifier = ">=0.9.2" },
-    { name = "warcio", marker = "extra == 'text'", specifier = ">=1.7.5" },
-]
-provides-extras = ["text", "audio", "video", "image", "all"]
 
 [[package]]
 name = "threadpoolctl"
