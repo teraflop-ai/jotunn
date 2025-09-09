@@ -56,7 +56,10 @@ def create_vllm_image_caption_udf(
             return generated_text
 
     return VllmImageCaptionUDF.with_init_args(
-        model_name=model_name, max_tokens=max_tokens, temperature=temperature
+        model_name=model_name,
+        prompt=prompt,
+        max_tokens=max_tokens,
+        temperature=temperature,
     )
 
 
@@ -65,8 +68,8 @@ class VllmImageCaption(Distributed):
         self,
         model_name: str,
         prompt: str,
-        max_tokens: int = 256,
-        temperature: float = 0.2,
+        max_tokens: Optional[int] = 256,
+        temperature: Optional[float] = 0.2,
         batch_size: int = 1,
         input_column: str = None,
         output_column: Optional[str] = "vllm_caption",
