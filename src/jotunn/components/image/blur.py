@@ -25,7 +25,7 @@ class Blur(ScoreFilter):
 
     def _score(self, image: np.array) -> float:
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        blur_score = cv2.Laplacian(gray, cv2.CV_32F).var()
+        blur_score = cv2.Laplacian(gray, cv2.CV_64F).var()
         return float(blur_score)
 
     def _filter(self, df: daft.DataFrame, threshold: float) -> daft.DataFrame:
