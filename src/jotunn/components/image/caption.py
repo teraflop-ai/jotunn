@@ -6,15 +6,10 @@ from PIL import Image
 
 from jotunn.components.distributed_base import Distributed
 
-CAPTION = """\
-<|im_start|>system\nYou are a helpful assistant.<|im_end|>\n\
-<|im_start|>user\n<|vision_start|><|image_pad|><|vision_end|>\
-f"Write a detailed description of what is in the image?<|im_end|>\n\
-<|im_start|>assistant\n"""
-
 
 def create_vllm_image_caption_udf(
     model_name: str,
+    prompt: str,
     max_tokens: Optional[int] = None,
     temperature: Optional[float] = None,
     batch_size: Optional[int] = None,
@@ -33,6 +28,7 @@ def create_vllm_image_caption_udf(
         def __init__(
             self,
             model_name: str = model_name,
+            prompt: str = prompt,
             max_tokens: int = max_tokens,
             temperature: float = temperature,
         ):
@@ -42,12 +38,13 @@ def create_vllm_image_caption_udf(
             self.sampling_params = SamplingParams(
                 max_tokens=max_tokens, temperature=temperature
             )
+            self.prompt = prompt
 
         def __call__(self, images: daft.DataFrame) -> daft.DataFrame:
             images = [Image.fromarray(img) for img in images]
             vllm_inputs = [
                 {
-                    "prompt": CAPTION,
+                    "prompt": self.prompt,
                     "multi_modal_data": {"image": image},
                 }
                 for image in images
@@ -66,9 +63,10 @@ def create_vllm_image_caption_udf(
 class VllmImageCaption(Distributed):
     def __init__(
         self,
-        model_name,
-        max_tokens=256,
-        temperature=0.2,
+        model_name: str,
+        prompt: str,
+        max_tokens: int = 256,
+        temperature: float = 0.2,
         batch_size: int = 1,
         input_column: str = None,
         output_column: Optional[str] = "vllm_caption",
@@ -77,6 +75,7 @@ class VllmImageCaption(Distributed):
         num_gpus: Optional[int] = None,
     ):
         self.model_name = model_name
+        self.prompt = prompt
         self.temperature = temperature
         self.max_tokens = max_tokens
         super().__init__(
@@ -91,6 +90,7 @@ class VllmImageCaption(Distributed):
     def _udf(self):
         return create_vllm_image_caption_udf(
             model_name=self.model_name,
+            prompt=self.prompt,
             max_tokens=self.max_tokens,
             temperature=self.temperature,
             batch_size=self.batch_size,
