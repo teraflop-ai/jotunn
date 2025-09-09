@@ -6,7 +6,7 @@ from daft import DataType
 from jotunn.components.base import ScoreFilter
 
 
-class ImageSize(ScoreFilter):
+class FileSize(ScoreFilter):
     def __init__(
         self,
         input_column: str = None,

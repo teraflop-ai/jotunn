@@ -1,7 +1,7 @@
 import daft
 from daft import col
 
-from jotunn.components.image.image_size import ImageSize
+from jotunn.components.image.file_size import FileSize
 
 df = daft.from_pydict(
     {
@@ -15,7 +15,7 @@ df = daft.from_pydict(
     }
 )
 
-image_size_filter = ImageSize(input_column="image_bytes")
+image_size_filter = FileSize(input_column="image_bytes")
 
 df = df.with_column("image_bytes", col("urls").url.download(on_error="null"))
 df = image_size_filter(df)
