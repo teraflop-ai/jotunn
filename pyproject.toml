@@ -21,6 +21,7 @@ dependencies = [
     "loguru>=0.7.3",
     "ray[data]>=2.47.1",
     "transformers<4.54.0",
+    "video-reader-rs>=0.2.10",
 ]
 [project.optional-dependencies]
 text = [
