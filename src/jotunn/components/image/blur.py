@@ -11,7 +11,7 @@ from jotunn.components.base import ScoreFilter
 class Blur(ScoreFilter):
     def __init__(
         self,
-        input_column: str = None,
+        input_column: str = "image",
         output_column: Optional[str] = "blur_score",
         daft_dtype: DataType = DataType.float32(),
         threshold: Optional[float] = 100.0,

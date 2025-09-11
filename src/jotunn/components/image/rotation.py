@@ -11,7 +11,7 @@ from jotunn.components.base import ScoreFilter
 class Rotation(ScoreFilter):
     def __init__(
         self,
-        input_column: str = None,
+        input_column: str = "image_bytes",
         output_column: Optional[str] = "image_orientation",
         daft_dtype: DataType = DataType.int8(),
         threshold: Optional[int] = 1,
@@ -23,8 +23,8 @@ class Rotation(ScoreFilter):
             threshold=threshold,
         )
 
-    def _score(self, image: bytes) -> int:
-        tags = exifread.process_file(BytesIO(image))
+    def _score(self, image_bytes: bytes) -> int:
+        tags = exifread.process_file(BytesIO(image_bytes))
         if "Image Orientation" in tags:
             orientation = tags["Image Orientation"].values[0]
             return orientation

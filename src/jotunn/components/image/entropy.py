@@ -12,7 +12,7 @@ from jotunn.components.base import ScoreFilter
 class Entropy(ScoreFilter):
     def __init__(
         self,
-        input_column: str = None,
+        input_column: str = "image",
         output_column: Optional[str] = "entropy_score",
         daft_dtype: DataType = DataType.float32(),
         threshold: Optional[float] = None,

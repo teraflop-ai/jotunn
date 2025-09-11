@@ -12,7 +12,7 @@ from jotunn.components.base import ScoreFilter
 class Contrast(ScoreFilter):
     def __init__(
         self,
-        input_column: str = None,
+        input_column: str = "image",
         output_column: Optional[str] = "contrast_score",
         daft_dtype: DataType = DataType.int8(),
         threshold: Optional[float] = 1,

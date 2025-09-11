@@ -11,7 +11,7 @@ from jotunn.components.base import ScoreFilter
 class Resolution(ScoreFilter):
     def __init__(
         self,
-        input_column: str = None,
+        input_column: str = "image",
         output_column: Optional[str] = "image_resolution",
         daft_dtype: DataType = DataType.struct(
             {
