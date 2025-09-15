@@ -1,7 +1,6 @@
 from typing import Optional
 
 import cv2
-import daft
 import numpy as np
 from daft import DataType
 
@@ -14,13 +13,15 @@ class Blur(ScoreFilter):
         input_column: str = "image",
         output_column: Optional[str] = "blur_score",
         daft_dtype: DataType = DataType.float32(),
-        threshold: Optional[float] = 100.0,
+        min_threshold: Optional[float] = None,
+        max_threshold: Optional[float] = None,
     ):
         super().__init__(
             input_column=input_column,
             output_column=output_column,
             daft_dtype=daft_dtype,
-            min_threshold=threshold,
+            min_threshold=min_threshold,
+            max_threshold=max_threshold,
         )
 
     def _score(self, image: np.array) -> float:

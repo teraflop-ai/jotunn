@@ -17,7 +17,7 @@ df = daft.from_pydict(
     }
 )
 
-brightness_filter = Brightness(input_column="image", threshold=0.8)
+brightness_filter = Brightness(input_column="image")
 
 df = df.with_column("image_bytes", col("urls").url.download(on_error="null"))
 df = df.with_column("image", col("image_bytes").image.decode())

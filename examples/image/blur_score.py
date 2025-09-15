@@ -15,7 +15,7 @@ df = daft.from_pydict(
     }
 )
 
-blur_filter = Blur(input_column="image", threshold=150.0)
+blur_filter = Blur(input_column="image")
 
 df = df.with_column("image_bytes", col("urls").url.download(on_error="null"))
 df = df.with_column("image", col("image_bytes").image.decode())
