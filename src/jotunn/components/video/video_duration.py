@@ -32,7 +32,3 @@ class VideoDuration(ScoreFilter):
         ).decode()
         fields = json.loads(result)["streams"][0]
         return float(fields["duration"])
-
-    def _filter(self, df: daft.DataFrame, threshold: int) -> daft.DataFrame:
-        df = df.where(df[self.output_column] <= threshold)
-        return df
