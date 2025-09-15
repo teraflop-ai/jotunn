@@ -1,10 +1,36 @@
 import json
 import subprocess
+from typing import Optional
 
-def get_video_duration(filename):
-    result = subprocess.check_output(
-        f'ffprobe -v quiet -show_streams -select_streams v:0 -of json "{filename}"',
-        shell=True,
-    ).decode()
-    fields = json.loads(result)["streams"][0]
-    return float(fields["duration"])
+import daft
+from daft import DataType
+
+from jotunn.components.base import ScoreFilter
+
+
+class VideoDuration(ScoreFilter):
+    def __init__(
+        self,
+        input_column: str = "filepath",
+        output_column: Optional[str] = "video_duration",
+        daft_dtype=DataType.float32(),
+        threshold: Optional[int] = None,
+    ):
+        super().__init__(
+            input_column=input_column,
+            output_column=output_column,
+            daft_dtype=daft_dtype,
+            threshold=threshold,
+        )
+
+    def _score(self, filename: str) -> float:
+        result = subprocess.check_output(
+            f'ffprobe -v quiet -show_streams -select_streams v:0 -of json "{filename}"',
+            shell=True,
+        ).decode()
+        fields = json.loads(result)["streams"][0]
+        return float(fields["duration"])
+
+    def _filter(self, df: daft.DataFrame, threshold: int) -> daft.DataFrame:
+        df = df.where(df[self.output_column] <= threshold)
+        return df
