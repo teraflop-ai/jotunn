@@ -49,8 +49,8 @@ class Resolution(ScoreFilter):
                 lambda x: self._score(x), return_dtype=self.daft_dtype
             ),
         )
-        
+
         if self.min_width is not None or self.min_height is not None:
             df = self._filter(df)
-        
+
         return df

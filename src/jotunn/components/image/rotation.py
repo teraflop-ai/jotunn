@@ -31,9 +31,7 @@ class Rotation(ScoreFilter):
         return -1
 
     def _filter(self, df: daft.DataFrame) -> daft.DataFrame:
-        df = df.where(
-            (df[self.output_column] == self.orientation)
-        )
+        df = df.where((df[self.output_column] == self.orientation))
         return df
 
     def __call__(self, df: daft.DataFrame) -> daft.DataFrame:

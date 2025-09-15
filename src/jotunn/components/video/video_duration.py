@@ -2,7 +2,6 @@ import json
 import subprocess
 from typing import Optional
 
-import daft
 from daft import DataType
 
 from jotunn.components.base import ScoreFilter
