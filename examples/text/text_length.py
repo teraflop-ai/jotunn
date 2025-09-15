@@ -13,6 +13,6 @@ df = daft.from_pydict(
     }
 )
 
-text_length_filter = TextLength(input_column="text", threshold=20)
+text_length_filter = TextLength(input_column="text", min_threshold=20)
 df = text_length_filter(df)
 df.show()

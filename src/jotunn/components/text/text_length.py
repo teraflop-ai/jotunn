@@ -12,18 +12,16 @@ class TextLength(ScoreFilter):
         input_column: str = None,
         output_column: Optional[str] = "text_length",
         daft_dtype: DataType = DataType.int32(),
-        threshold: Optional[int] = None,
+        min_threshold: Optional[float] = None,
+        max_threshold: Optional[float] = None,
     ):
         super().__init__(
             input_column=input_column,
             output_column=output_column,
             daft_dtype=daft_dtype,
-            threshold=threshold,
+            min_threshold=min_threshold,
+            max_threshold=max_threshold,
         )
 
     def _score(self, text) -> float:
         return len(text)
-
-    def _filter(self, df: daft.DataFrame, threshold: float) -> daft.DataFrame:
-        df = df.where(df[self.output_column] >= threshold)
-        return df
