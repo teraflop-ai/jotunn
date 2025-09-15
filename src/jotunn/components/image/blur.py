@@ -20,14 +20,10 @@ class Blur(ScoreFilter):
             input_column=input_column,
             output_column=output_column,
             daft_dtype=daft_dtype,
-            threshold=threshold,
+            min_threshold=threshold,
         )
 
     def _score(self, image: np.array) -> float:
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         blur_score = cv2.Laplacian(gray, cv2.CV_64F).var()
         return float(blur_score)
-
-    def _filter(self, df: daft.DataFrame, threshold: float) -> daft.DataFrame:
-        df = df.where(df[self.output_column] >= threshold)
-        return df

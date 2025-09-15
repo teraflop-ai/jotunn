@@ -20,18 +20,10 @@ class Brightness(ScoreFilter):
             input_column=input_column,
             output_column=output_column,
             daft_dtype=daft_dtype,
-            threshold=threshold,
+            max_threshold=threshold,
         )
 
     def _score(self, image: np.array) -> float:
-        if image is None:
-            return -1.0
         hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
         brightness = cv2.mean(hsv)[2] / 255.0
         return brightness
-
-    def _filter(self, df: daft.DataFrame, threshold: float) -> daft.DataFrame:
-        df = df.where(
-            (df[self.output_column] <= threshold) | (df[self.output_column] == -1)
-        )
-        return df

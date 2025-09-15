@@ -14,13 +14,15 @@ class VideoDuration(ScoreFilter):
         input_column: str = "filepath",
         output_column: Optional[str] = "video_duration",
         daft_dtype=DataType.float32(),
-        threshold: Optional[int] = None,
+        min_duration: Optional[float] = None,
+        max_duration: Optional[float] = None,
     ):
         super().__init__(
             input_column=input_column,
             output_column=output_column,
             daft_dtype=daft_dtype,
-            threshold=threshold,
+            min_threshold=min_duration,
+            max_threshold=max_duration,
         )
 
     def _score(self, filename: str) -> float:
