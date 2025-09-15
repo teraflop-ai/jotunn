@@ -15,7 +15,7 @@ df = daft.from_pydict(
     }
 )
 
-resolution_filter = Resolution(input_column="image", threshold=256)
+resolution_filter = Resolution(input_column="image", min_width=300, min_height=300)
 
 df = df.with_column("image_bytes", col("urls").url.download(on_error="null"))
 df = df.with_column("image", col("image_bytes").image.decode())
