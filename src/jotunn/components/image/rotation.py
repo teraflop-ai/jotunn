@@ -14,13 +14,13 @@ class Rotation(ScoreFilter):
         input_column: str = "image_bytes",
         output_column: Optional[str] = "image_orientation",
         daft_dtype: DataType = DataType.int8(),
-        threshold: Optional[int] = 1,
+        orientation: Optional[int] = 1,
     ):
+        self.orientation = orientation
         super().__init__(
             input_column=input_column,
             output_column=output_column,
             daft_dtype=daft_dtype,
-            threshold=threshold,
         )
 
     def _score(self, image_bytes: bytes) -> int:
@@ -30,8 +30,20 @@ class Rotation(ScoreFilter):
             return orientation
         return -1
 
-    def _filter(self, df: daft.DataFrame, threshold: int) -> daft.DataFrame:
+    def _filter(self, df: daft.DataFrame) -> daft.DataFrame:
         df = df.where(
-            (df[self.output_column] == threshold) | (df[self.output_column] == -1)
+            (df[self.output_column] == self.orientation)
         )
+        return df
+
+    def __call__(self, df: daft.DataFrame) -> daft.DataFrame:
+        """Apply the score and filter to the dataframe."""
+        df = df.with_column(
+            self.output_column,
+            daft.col(self.input_column).apply(
+                lambda x: self._score(x), return_dtype=self.daft_dtype
+            ),
+        )
+        if self.orientation:
+            df = self._filter(df)
         return df

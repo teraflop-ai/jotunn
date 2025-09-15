@@ -19,8 +19,8 @@ class Resolution(ScoreFilter):
                 "height": DataType.int32(),
             }
         ),
-        min_width: int = None,
-        min_height: int = None,
+        min_width: Optional[int] = 256,
+        min_height: Optional[int] = 256,
     ):
         self.min_width = min_width
         self.min_height = min_height
@@ -37,8 +37,8 @@ class Resolution(ScoreFilter):
 
     def _filter(self, df: daft.DataFrame) -> daft.DataFrame:
         df = df.where(
-            (df[self.output_column]["width"] > self.min_width)
-            & (df[self.output_column]["height"] > self.min_height)
+            (df[self.output_column]["width"] >= self.min_width)
+            & (df[self.output_column]["height"] >= self.min_height)
         )
         return df
 

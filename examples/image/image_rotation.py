@@ -17,7 +17,7 @@ df = daft.from_pydict(
     }
 )
 
-rotation_filter = Rotation(input_column="image_bytes", threshold=1)
+rotation_filter = Rotation(input_column="image_bytes", orientation=1)
 
 df = df.with_column("image_bytes", col("urls").url.download(on_error="null"))
 df = rotation_filter(df)
