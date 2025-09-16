@@ -11,7 +11,7 @@ class Blur(ScoreFilter):
     def __init__(
         self,
         input_column: str = "image",
-        output_column: Optional[str] = "blur_score",
+        output_column: str = "blur_score",
         daft_dtype: DataType = DataType.float32(),
         min_threshold: Optional[float] = None,
         max_threshold: Optional[float] = None,

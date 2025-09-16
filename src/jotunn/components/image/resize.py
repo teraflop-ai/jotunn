@@ -7,7 +7,7 @@ class Resize:
     def __init__(
         self,
         input_column: str = "image",
-        output_column: Optional[str] = "image_resized",
+        output_column: str = "image_resized",
         width: int = 256,
         height: int = 256,
     ):

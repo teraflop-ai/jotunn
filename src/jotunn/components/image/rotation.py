@@ -12,7 +12,7 @@ class Rotation(ScoreFilter):
     def __init__(
         self,
         input_column: str = "image_bytes",
-        output_column: Optional[str] = "image_orientation",
+        output_column: str = "image_orientation",
         daft_dtype: DataType = DataType.int8(),
         orientation: Optional[int] = 1,
     ):

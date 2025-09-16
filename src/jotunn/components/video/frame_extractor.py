@@ -1,6 +1,7 @@
 from typing import List
 
 import cv2
+import daft
 import numpy as np
 from daft import DataType, col
 from video_reader import PyVideoReader
@@ -9,7 +10,7 @@ from video_reader import PyVideoReader
 class FrameExtractor:
     def __init__(
         self,
-        input_column: str,
+        input_column: str = "image",
         output_column: str = "image",
         number_frames: int = 8,
         encoding: str = ".webp",
@@ -44,7 +45,7 @@ class FrameExtractor:
             print(f"Error processing {filepath}: {e}")
             return []
 
-    def __call__(self, df):
+    def __call__(self, df: daft.DataFrame) -> daft.DataFrame:
         df = df.with_column(
             "image_bytes",
             col(self.input_column).apply(

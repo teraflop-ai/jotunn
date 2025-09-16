@@ -10,7 +10,7 @@ class FileSize(ScoreFilter):
     def __init__(
         self,
         input_column: str = "image",
-        output_column: Optional[str] = "image_size",
+        output_column: str = "image_size",
         daft_dtype: DataType = DataType.int32(),
         min_threshold: Optional[float] = None,
         max_threshold: Optional[float] = None,

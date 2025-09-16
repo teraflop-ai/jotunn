@@ -11,7 +11,7 @@ class VideoDuration(ScoreFilter):
     def __init__(
         self,
         input_column: str = "filepath",
-        output_column: Optional[str] = "video_duration",
+        output_column: str = "video_duration",
         daft_dtype=DataType.float32(),
         min_duration: Optional[float] = None,
         max_duration: Optional[float] = None,

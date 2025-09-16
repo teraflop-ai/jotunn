@@ -12,7 +12,7 @@ class TokenLength(ScoreFilter):
         self,
         tokenizer_name: str,
         input_column: str = "text",
-        output_column: Optional[str] = "token_length",
+        output_column: str = "token_length",
         daft_dtype=DataType.int32(),
         min_threshold: Optional[float] = None,
         max_threshold: Optional[float] = None,

@@ -12,7 +12,7 @@ class Resolution(ScoreFilter):
     def __init__(
         self,
         input_column: str = "image",
-        output_column: Optional[str] = "image_resolution",
+        output_column: str = "image_resolution",
         daft_dtype: DataType = DataType.struct(
             {
                 "width": DataType.int32(),

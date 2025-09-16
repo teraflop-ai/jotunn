@@ -13,7 +13,7 @@ class Contrast(ScoreFilter):
     def __init__(
         self,
         input_column: str = "image",
-        output_column: Optional[str] = "contrast_score",
+        output_column: str = "contrast_score",
         daft_dtype: DataType = DataType.int8(),
         threshold: Optional[float] = 1,
         contrast: Optional[float] = 0.05,

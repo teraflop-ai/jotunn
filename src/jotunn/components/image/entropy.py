@@ -13,7 +13,7 @@ class Entropy(ScoreFilter):
     def __init__(
         self,
         input_column: str = "image",
-        output_column: Optional[str] = "entropy_score",
+        output_column: str = "entropy_score",
         daft_dtype: DataType = DataType.float32(),
         min_threshold: Optional[float] = None,
         max_threshold: Optional[float] = None,

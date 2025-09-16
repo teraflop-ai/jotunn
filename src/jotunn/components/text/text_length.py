@@ -9,8 +9,8 @@ from jotunn.components.base import ScoreFilter
 class TextLength(ScoreFilter):
     def __init__(
         self,
-        input_column: str = None,
-        output_column: Optional[str] = "text_length",
+        input_column: str = "text",
+        output_column: str = "text_length",
         daft_dtype: DataType = DataType.int32(),
         min_threshold: Optional[float] = None,
         max_threshold: Optional[float] = None,
