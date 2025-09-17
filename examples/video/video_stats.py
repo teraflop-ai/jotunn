@@ -1,23 +1,17 @@
 import daft
-from daft import DataType, col
 
-from jotunn.components.video.video_stats import get_video_stats
+from jotunn.components.video.video_stats import VideoStats
 
-df = daft.from_pydict({"filepath": ["/videos/my.mp4"]})
-df = df.with_column(
-    "video_stats",
-    col("filepath").apply(
-        get_video_stats,
-        return_dtype=DataType.struct(
-            {
-                "aspect_ratio": DataType.string(),
-                "fps": DataType.string(),
-                "frame_count": DataType.string(),
-                "duration": DataType.string(),
-                "width": DataType.string(),
-                "heigt": DataType.string(),
-            }
-        ),
-    ),
+df = daft.from_pydict(
+    {
+        "filepath": [
+            "/video/IYJgv2Cuf1E.mp4",
+            "/video/bwcedHNNcVk.mp4",
+            "/video/UGi_x_L3InY.mp4",
+        ]
+    }
 )
+
+video_stats = VideoStats()
+df = video_stats(df)
 df.show()
