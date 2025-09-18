@@ -7,17 +7,16 @@ import numpy as np
 from jotunn.components.image.resize import Resize
 from jotunn.components.video.frame_extractor import FrameExtractor
 
-daft.set_execution_config(parquet_target_filesize=5 * 1024 * 1024 * 1024)
-
 df = daft.from_pydict(
     {
         "filepath": [
-            "/Parallel Computer Architecture and Programming, Lecture 4 (Tsinghua⧸CMU 2017 Summer Course) [yNP6RsiZNXQ].mkv"
+            "/video/UGi_x_L3InY.mp4",
+            "/video/IYJgv2Cuf1E.mp4",
         ]
     }
 )
 
-extractor = FrameExtractor(input_column="filepath", number_frames=8, encoding=".webp")
+extractor = FrameExtractor(input_column="filepath")
 resized = Resize(input_column="image", output_column="image")
 
 df = extractor(df)
@@ -30,7 +29,4 @@ df.show()
 
 os.makedirs("/extracted_frames", exist_ok=True)
 for i, img in enumerate(df.to_pydict()["image"]):
-    cv2.imwrite(
-        f"/extracted_frames/frame_{i}.webp",
-        cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR),
-    )
+    cv2.imwrite(f"/extracted_frames/frame_{i}.webp", np.array(img))
