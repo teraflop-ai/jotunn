@@ -21,7 +21,6 @@ dependencies = [
     "loguru>=0.7.3",
     "ray[data]>=2.47.1",
     "transformers<4.54.0",
-    "video-reader-rs>=0.2.10",
 ]
 [project.optional-dependencies]
 text = [
@@ -36,6 +35,7 @@ audio = [
 video = [
     "av>=15.1.0",
     "scenedetect>=0.6.6",
+    "video-reader-rs>=0.2.10",
 ]
 image = [
     "exifread>=3.5.1",
