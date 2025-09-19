@@ -1,17 +1,18 @@
 from typing import Optional
-
+import re2
 from daft import DataType
 
 from jotunn.components.base import ScoreFilter
 
+pattern = re2.compile("[a-zA-Z0-9\n?!,.]")
 
-class TextLength(ScoreFilter):
+class AlphanumericText(ScoreFilter):
     def __init__(
         self,
         input_column: str = "text",
         output_column: str = "text_length",
-        daft_dtype: DataType = DataType.int32(),
-        min_threshold: Optional[float] = None,
+        daft_dtype: DataType = DataType.float32(),
+        min_threshold: Optional[float] = 0.75,
         max_threshold: Optional[float] = None,
     ):
         super().__init__(
@@ -22,5 +23,8 @@ class TextLength(ScoreFilter):
             max_threshold=max_threshold,
         )
 
-    def _score(self, text) -> float:
-        return len(text)
+    def _score(self, text: str) -> float:
+        if len(text) == 0:
+            return 0.0
+        alphanumeric = len(pattern.findall(text))
+        return alphanumeric / len(text)
