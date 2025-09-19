@@ -1,6 +1,6 @@
 import daft
 
-from jotunn.components.text.alphanumeric import AlphanumericText
+from jotunn.components.text.digit import Digits
 
 df = daft.from_pydict(
     {
@@ -9,11 +9,11 @@ df = daft.from_pydict(
             "Someday I will buy",
             "Galleys with good oars",
             "Sail to distant shores",
-            "!@#$%^&*(,)_+=:;",
+            "11111111111",
         ],
     }
 )
 
-text_length_filter = AlphanumericText(input_column="text", min_threshold=0.75)
+text_length_filter = Digits(input_column="text", max_threshold=0.5)
 df = text_length_filter(df)
 df.show()
