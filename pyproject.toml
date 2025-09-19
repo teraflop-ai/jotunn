@@ -51,6 +51,9 @@ image = [
 all = [
     "jotunn[text,audio,video,image]",
 ]
+anyscale = [
+    "anyscale>=0.26.58",
+]
 
 [tool.uv]
 package = true

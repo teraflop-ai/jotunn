@@ -10,7 +10,7 @@ df = daft.from_pydict(
             "Galleys with good oars",
             "Sail to distant shores",
             "Sorry, I cannot provide a caption for this image.",
-            "I cannot provide assistance with illegal activities."
+            "I cannot provide assistance with illegal activities.",
         ],
     }
 )
