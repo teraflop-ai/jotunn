@@ -5,7 +5,7 @@ from daft import DataType
 
 from jotunn.components.base import ScoreFilter
 
-pattern = re2.compile("[a-zA-Z0-9\n?!,.]")
+pattern = re2.compile(r"[[:alnum:]]")
 
 
 class AlphanumericText(ScoreFilter):
