@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 
 import easyocr
 import numpy as np
@@ -11,8 +11,10 @@ from jotunn.components.base import ScoreFilter
 class IntensiveText(ScoreFilter):
     def __init__(
         self,
+        languages: List[str] = ["ch_sim", "en"],
+        gpu: bool = True,
         input_column: str = "image",
-        output_column: str = "ocr_score",
+        output_column: str = "intensive_text_score",
         daft_dtype: DataType = DataType.float32(),
         min_threshold: Optional[float] = None,
         max_threshold: Optional[float] = None,
@@ -24,7 +26,7 @@ class IntensiveText(ScoreFilter):
             min_threshold=min_threshold,
             max_threshold=max_threshold,
         )
-        self.reader = easyocr.Reader(["en"])
+        self.reader = easyocr.Reader(languages, gpu=gpu)
 
     def _score(self, image: np.array) -> float:
         pil_image = Image.fromarray(image)

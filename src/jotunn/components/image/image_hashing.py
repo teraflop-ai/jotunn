@@ -3,6 +3,7 @@ from typing import Optional
 
 import daft
 import imagehash
+from daft import DataType
 from PIL import Image
 
 from jotunn.components.distributed_base import Distributed
@@ -27,7 +28,7 @@ def create_image_hasher_udf(
     num_gpus: Optional[int] = None,
 ):
     @daft.udf(
-        return_dtype=daft.DataType.string(),
+        return_dtype=DataType.string(),
         concurrency=concurrency,
         num_cpus=num_cpus,
         num_gpus=num_gpus,
