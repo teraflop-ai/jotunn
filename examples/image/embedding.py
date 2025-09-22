@@ -1,7 +1,7 @@
 import daft
 from daft import col
 
-from jotunn.components.image.embedding import ClipEmbedding, SiglipEmbedding
+from jotunn.components.image.embedding import ClipImageEmbedding, SiglipEmbedding
 
 df = daft.from_pydict(
     {
@@ -21,7 +21,7 @@ siglip = SiglipEmbedding(
     input_column="image", batch_size=8, concurrency=1, num_cpus=6, num_gpus=1
 )
 
-clip = ClipEmbedding(
+clip = ClipImageEmbedding(
     input_column="image", batch_size=8, concurrency=1, num_cpus=6, num_gpus=1
 )
 

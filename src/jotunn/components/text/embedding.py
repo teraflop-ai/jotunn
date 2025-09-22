@@ -111,3 +111,85 @@ class SentenceTransformersEmbed(Distributed):
             num_cpus=self.num_cpus,
             num_gpus=self.num_gpus,
         )
+
+
+def create_clip_udf(
+    model_name: str,
+    batch_size: Optional[int] = None,
+    concurrency: Optional[int] = None,
+    num_cpus: Optional[int] = None,
+    num_gpus: Optional[int] = None,
+):
+    @daft.udf(
+        return_dtype=DataType.list(DataType.float32()),
+        concurrency=concurrency,
+        num_cpus=num_cpus,
+        num_gpus=num_gpus,
+        batch_size=batch_size,
+    )
+    class ClipUDF:
+        def __init__(
+            self,
+            model_name: str = model_name,
+            device: str = "cuda",
+            dtype: torch.dtype = torch.bfloat16,
+            attn_implementation: str = "sdpa",
+        ):
+            from transformers import AutoTokenizer, CLIPModel
+
+            self.device = device
+
+            self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+
+            self.model = CLIPModel.from_pretrained(
+                model_name,
+                torch_dtype=dtype,
+                attn_implementation=attn_implementation,
+            ).to(self.device)
+            self.model.compile()
+            self.model.eval()
+
+        def __call__(self, text: daft.DataFrame) -> daft.DataFrame:
+            with torch.no_grad():
+                inputs = self.tokenizer(
+                    text=text.to_pylist(), return_tensors="pt", padding=True
+                ).to(self.device)
+                text_features = self.model.get_text_features(**inputs)
+                text_features /= text_features.norm(dim=-1, keepdim=True)
+                text_embs = text_features.float().cpu().numpy()
+                return text_embs
+
+    return ClipUDF.with_init_args(
+        model_name=model_name,
+    )
+
+
+class ClipTextEmbedding(Distributed):
+    def __init__(
+        self,
+        model_name: str = "openai/clip-vit-base-patch32",
+        batch_size: int = 1,
+        input_column: str = "image",
+        output_column: str = "clip_text_embedding",
+        concurrency: Optional[int] = None,
+        num_cpus: Optional[int] = None,
+        num_gpus: Optional[int] = None,
+    ):
+        self.model_name = model_name
+        super().__init__(
+            input_column=input_column,
+            output_column=output_column,
+            batch_size=batch_size,
+            concurrency=concurrency,
+            num_cpus=num_cpus,
+            num_gpus=num_gpus,
+        )
+
+    def _udf(self):
+        return create_clip_udf(
+            model_name=self.model_name,
+            batch_size=self.batch_size,
+            concurrency=self.concurrency,
+            num_cpus=self.num_cpus,
+            num_gpus=self.num_gpus,
+        )

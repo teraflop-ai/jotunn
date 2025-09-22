@@ -113,13 +113,11 @@ def create_clip_udf(
             dtype: torch.dtype = torch.bfloat16,
             attn_implementation: str = "sdpa",
         ):
-            from transformers import AutoImageProcessor, CLIPModel
+            from transformers import CLIPModel, CLIPProcessor
 
             self.device = device
 
-            self.processor = AutoImageProcessor.from_pretrained(
-                model_name, use_fast=True
-            )
+            self.processor = CLIPProcessor.from_pretrained(model_name, use_fast=True)
 
             self.model = CLIPModel.from_pretrained(
                 model_name,
@@ -144,7 +142,7 @@ def create_clip_udf(
     )
 
 
-class ClipEmbedding(Distributed):
+class ClipImageEmbedding(Distributed):
     def __init__(
         self,
         model_name: str = "openai/clip-vit-base-patch32",
