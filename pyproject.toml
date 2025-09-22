@@ -49,11 +49,11 @@ image = [
     "scikit-image>=0.25.2",
     "vllm>=0.9.2",
 ]
-all = [
-    "jotunn[text,audio,video,image]",
-]
 anyscale = [
     "anyscale>=0.26.58",
+]
+all = [
+    "jotunn[text,audio,video,image,anyscale]",
 ]
 
 [tool.uv]
