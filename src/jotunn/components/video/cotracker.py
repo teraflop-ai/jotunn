@@ -106,7 +106,7 @@ class Cotracker(Distributed):
         self.model_name = model_name
         self.grid_size = grid_size
         super().__init__(
-            input_column=input_column,
+            input_columns=input_column,
             output_column=output_column,
             batch_size=batch_size,
             concurrency=concurrency,

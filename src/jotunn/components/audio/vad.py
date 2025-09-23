@@ -54,7 +54,7 @@ class VAD(Distributed):
         num_gpus: Optional[int] = None,
     ):
         super().__init__(
-            input_column=input_column,
+            input_columns=input_column,
             output_column=output_column,
             batch_size=batch_size,
             concurrency=concurrency,

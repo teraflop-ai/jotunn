@@ -25,7 +25,7 @@ class FarnebackOpticalFlow(ScoreFilter):
         max_threshold: Optional[float] = None,
     ):
         super().__init__(
-            input_column=input_column,
+            input_columns=input_column,
             output_column=output_column,
             daft_dtype=daft_dtype,
             min_threshold=min_threshold,

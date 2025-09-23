@@ -94,7 +94,7 @@ class SentenceTransformersEmbed(Distributed):
         self.model_name = model_name
         self.max_seq_length = max_seq_length
         super().__init__(
-            input_column=input_column,
+            input_columns=input_column,
             output_column=output_column,
             batch_size=batch_size,
             concurrency=concurrency,
@@ -175,15 +175,15 @@ class ClipTextEmbedding(Distributed):
         num_cpus: Optional[int] = None,
         num_gpus: Optional[int] = None,
     ):
-        self.model_name = model_name
         super().__init__(
-            input_column=input_column,
+            input_columns=input_column,
             output_column=output_column,
             batch_size=batch_size,
             concurrency=concurrency,
             num_cpus=num_cpus,
             num_gpus=num_gpus,
         )
+        self.model_name = model_name
 
     def _udf(self):
         return create_clip_udf(

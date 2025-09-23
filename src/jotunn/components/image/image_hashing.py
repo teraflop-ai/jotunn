@@ -92,16 +92,16 @@ class ImageHasher(Distributed):
         num_cpus: Optional[int] = None,
         num_gpus: Optional[int] = None,
     ):
-        self.hashing_algorithm = hashing_algorithm
-        self.hash_size = hash_size
         super().__init__(
-            input_column=input_column,
+            input_columns=input_column,
             output_column=output_column,
             batch_size=batch_size,
             concurrency=concurrency,
             num_cpus=num_cpus,
             num_gpus=num_gpus,
         )
+        self.hashing_algorithm = hashing_algorithm
+        self.hash_size = hash_size
 
     def _udf(self):
         """Apply the image hasher UDF to the dataframe."""

@@ -1,6 +1,5 @@
 from typing import List, Optional
 
-import daft
 from daft import DataType
 from transformers import AutoTokenizer
 
