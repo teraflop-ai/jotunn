@@ -26,12 +26,8 @@ jobs:
           libpng-dev \
           zlib1g-dev
 
-
       - name: Install the latest version of uv
         uses: astral-sh/setup-uv@v6
-
-      - name: Install the project
-        run: uv sync --all-extras
 
       - name: Build wheel
         run: uv build
