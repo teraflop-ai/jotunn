@@ -16,6 +16,11 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      - name: Install build dependencies
+        run: apt-get update && apt-get install -y \
+          gcc \
+          libjpeg-dev
+
       - name: Install the latest version of uv
         uses: astral-sh/setup-uv@v6
 
