@@ -33,7 +33,9 @@ text = [
     "vllm>=0.9.2",
 ]
 audio = [
+    "librosa>=0.11.0",
     "silero-vad>=5.1.2",
+    "soundfile>=0.13.1",
 ]
 video = [
     "av>=15.1.0",
