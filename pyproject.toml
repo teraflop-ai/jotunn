@@ -22,8 +22,10 @@ dependencies = [
     "loguru>=0.7.3",
     "memray>=1.18.0",
     "pysimdjson>=7.0.2",
+    "rapidfuzz>=3.14.1",
     "ray[data]>=2.47.1",
     "transformers<4.54.0",
+    "usearch>=2.21.0",
 ]
 [project.optional-dependencies]
 text = [
