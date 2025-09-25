@@ -28,7 +28,7 @@ def create_image_hasher_udf(
     num_gpus: Optional[int] = None,
 ):
     @daft.udf(
-        return_dtype=DataType.string(),
+        return_dtype=DataType.list(DataType.bool()),
         concurrency=concurrency,
         num_cpus=num_cpus,
         num_gpus=num_gpus,
@@ -44,7 +44,10 @@ def create_image_hasher_udf(
             self.hash_size = hash_size
 
         def __call__(self, images):
-            return [self.hash_image(Image.fromarray(img)) for img in images]
+            return [
+                self.hash_image(Image.fromarray(img)).hash.flatten().tolist()
+                for img in images
+            ]
 
         def hash_image(self, image):
             """

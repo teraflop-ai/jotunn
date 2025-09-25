@@ -22,9 +22,7 @@ df = daft.from_pydict(
 
 hasher = ImageHasher(
     input_column="image",
-    hashing_algorithm="wavelet",
-    concurrency=1,
-    num_cpus=6,
+    hashing_algorithm="perceptual",
 )
 
 df = df.with_column("image_bytes", col("urls").url.download(on_error="null"))
