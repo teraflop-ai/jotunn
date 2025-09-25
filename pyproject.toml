@@ -20,6 +20,7 @@ dependencies = [
     "daft",
     "google-re2>=1.1.20250805",
     "loguru>=0.7.3",
+    "matplotlib>=3.10.6",
     "memray>=1.18.0",
     "pysimdjson>=7.0.2",
     "rapidfuzz>=3.14.1",
