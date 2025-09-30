@@ -3,6 +3,7 @@ from typing import Optional
 import daft
 import torch
 from daft import DataType
+from transformers import AutoProcessor, CLIPModel, CLIPProcessor, SiglipModel
 
 from jotunn.components.distributed_base import Distributed
 
@@ -26,23 +27,21 @@ def create_siglip_udf(
             self,
             model_name: str = model_name,
             device: str = "cuda",
-            dtype: torch.dtype = torch.bfloat16,
-            attn_implementation: str = "sdpa",
         ):
-            from transformers import AutoImageProcessor, SiglipModel
+            self.device = torch.device(device=device)
+            if self.device.type == "cpu":
+                self.dtype = torch.float32
+            else:
+                self.dtype = (
+                    torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
+                )
 
-            self.device = device
-
-            self.processor = AutoImageProcessor.from_pretrained(
-                model_name, use_fast=True
-            )
+            self.processor = AutoProcessor.from_pretrained(model_name, use_fast=True)
 
             self.model = SiglipModel.from_pretrained(
                 model_name,
-                torch_dtype=dtype,
-                attn_implementation=attn_implementation,
             ).to(self.device)
-            self.model.compile()
+            self.model = torch.compile(self.model)
             self.model.eval()
 
         def __call__(self, images: daft.DataFrame) -> daft.DataFrame:
@@ -50,10 +49,16 @@ def create_siglip_udf(
                 inputs = self.processor(
                     images=images.to_pylist(), return_tensors="pt"
                 ).to(self.device)
-                image_features = self.model.get_image_features(**inputs)
+                image_features = self.encode_images(inputs)
                 image_features /= image_features.norm(dim=-1, keepdim=True)
                 image_embs = image_features.float().cpu().numpy()
                 return image_embs
+
+        def encode_images(self, inputs):
+            if self.device.type == "cpu":
+                return self.model.get_image_features(**inputs)
+            with torch.autocast(device_type=self.device.type, dtype=self.dtype):
+                return self.model.get_image_features(**inputs)
 
     return SiglipUDF.with_init_args(
         model_name=model_name,
@@ -110,21 +115,21 @@ def create_clip_udf(
             self,
             model_name: str = model_name,
             device: str = "cuda",
-            dtype: torch.dtype = torch.bfloat16,
-            attn_implementation: str = "sdpa",
         ):
-            from transformers import CLIPModel, CLIPProcessor
-
-            self.device = device
+            self.device = torch.device(device=device)
+            if self.device.type == "cpu":
+                self.dtype = torch.float32
+            else:
+                self.dtype = (
+                    torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
+                )
 
             self.processor = CLIPProcessor.from_pretrained(model_name, use_fast=True)
 
             self.model = CLIPModel.from_pretrained(
                 model_name,
-                torch_dtype=dtype,
-                attn_implementation=attn_implementation,
             ).to(self.device)
-            self.model.compile()
+            self.model = torch.compile(self.model)
             self.model.eval()
 
         def __call__(self, images: daft.DataFrame) -> daft.DataFrame:
@@ -132,10 +137,16 @@ def create_clip_udf(
                 inputs = self.processor(
                     images=images.to_pylist(), return_tensors="pt"
                 ).to(self.device)
-                image_features = self.model.get_image_features(**inputs)
+                image_features = self.encode_images(inputs)
                 image_features /= image_features.norm(dim=-1, keepdim=True)
                 image_embs = image_features.float().cpu().numpy()
                 return image_embs
+
+        def encode_images(self, inputs):
+            if self.device.type == "cpu":
+                return self.model.get_image_features(**inputs)
+            with torch.autocast(device_type=self.device.type, dtype=self.dtype):
+                return self.model.get_image_features(**inputs)
 
     return ClipUDF.with_init_args(
         model_name=model_name,
