@@ -11,7 +11,7 @@ class FarnebackOpticalFlow(ScoreFilter):
     def __init__(
         self,
         input_column: str = "filepath",
-        output_column: str = "optical_flow_Score",
+        output_column: str = "optical_flow_score",
         pyr_scale=0.5,
         levels=3,
         winsize=15,
@@ -25,7 +25,7 @@ class FarnebackOpticalFlow(ScoreFilter):
         max_threshold: Optional[float] = None,
     ):
         super().__init__(
-            input_columns=input_column,
+            input_column=input_column,
             output_column=output_column,
             daft_dtype=daft_dtype,
             min_threshold=min_threshold,

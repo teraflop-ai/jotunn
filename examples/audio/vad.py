@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import daft
 
 from jotunn.components.audio.vad import VAD
@@ -5,7 +7,7 @@ from jotunn.components.audio.vad import VAD
 df = daft.from_pydict(
     {
         "filepath": [
-            "/Downloads/hahaha2.wav",
+            f"{Path.home()}/Downloads/hahaha2.wav",
         ],
     }
 )
