@@ -28,11 +28,28 @@ siglip = ImageEmbedding(
 )
 
 clip = ImageEmbedding(
-    embedder="clip", input_column="image", batch_size=8, concurrency=1, num_gpus=1
+    embedder="clip",
+    model_name="openai/clip-vit-base-patch32",
+    input_column="image",
+    output_column="clip_image_embedding",
+    batch_size=8,
+    concurrency=1,
+    num_gpus=1,
+)
+
+openclip = ImageEmbedding(
+    embedder="openclip",
+    model_name="ViT-B-32/laion2b_s34b_b79k",
+    input_column="image",
+    output_column="clip_image_embedding",
+    batch_size=8,
+    concurrency=1,
+    num_gpus=1,
 )
 
 df = df.with_column("image_bytes", col("urls").url.download(on_error="null"))
 df = df.with_column("image", col("image_bytes").image.decode())
 df = siglip(df)
 df = clip(df)
+df = openclip(df)
 df.show()
