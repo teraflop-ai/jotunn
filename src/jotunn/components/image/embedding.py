@@ -65,37 +65,6 @@ def create_siglip_udf(
     )
 
 
-class SiglipEmbedding(Distributed):
-    def __init__(
-        self,
-        model_name: str = "nielsr/siglip-base-patch16-224",
-        batch_size: int = 1,
-        input_column: str = "image",
-        output_column: str = "siglip_image_embedding",
-        concurrency: Optional[int] = None,
-        num_cpus: Optional[int] = None,
-        num_gpus: Optional[int] = None,
-    ):
-        super().__init__(
-            input_columns=input_column,
-            output_column=output_column,
-            batch_size=batch_size,
-            concurrency=concurrency,
-            num_cpus=num_cpus,
-            num_gpus=num_gpus,
-        )
-        self.model_name = model_name
-
-    def _udf(self):
-        return create_siglip_udf(
-            model_name=self.model_name,
-            batch_size=self.batch_size,
-            concurrency=self.concurrency,
-            num_cpus=self.num_cpus,
-            num_gpus=self.num_gpus,
-        )
-
-
 def create_clip_udf(
     model_name: str,
     batch_size: Optional[int] = None,
@@ -153,13 +122,14 @@ def create_clip_udf(
     )
 
 
-class ClipImageEmbedding(Distributed):
+class ImageEmbedding(Distributed):
     def __init__(
         self,
+        embedder: str = "clip",  # siglip
         model_name: str = "openai/clip-vit-base-patch32",
         batch_size: int = 1,
         input_column: str = "image",
-        output_column: str = "clip_image_embedding",
+        output_column: str = "image_embedding",
         concurrency: Optional[int] = None,
         num_cpus: Optional[int] = None,
         num_gpus: Optional[int] = None,
@@ -172,13 +142,25 @@ class ClipImageEmbedding(Distributed):
             num_cpus=num_cpus,
             num_gpus=num_gpus,
         )
+        self.embedder = embedder
         self.model_name = model_name
 
     def _udf(self):
-        return create_clip_udf(
-            model_name=self.model_name,
-            batch_size=self.batch_size,
-            concurrency=self.concurrency,
-            num_cpus=self.num_cpus,
-            num_gpus=self.num_gpus,
-        )
+        if self.embedder == "clip":
+            return create_clip_udf(
+                model_name=self.model_name,
+                batch_size=self.batch_size,
+                concurrency=self.concurrency,
+                num_cpus=self.num_cpus,
+                num_gpus=self.num_gpus,
+            )
+        elif self.embedder == "siglip":
+            return create_siglip_udf(
+                model_name=self.model_name,
+                batch_size=self.batch_size,
+                concurrency=self.concurrency,
+                num_cpus=self.num_cpus,
+                num_gpus=self.num_gpus,
+            )
+        else:
+            raise NotImplementedError()

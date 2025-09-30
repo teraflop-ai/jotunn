@@ -1,7 +1,7 @@
 import daft
 from daft import col
 
-from jotunn.components.image.embedding import ClipImageEmbedding, SiglipEmbedding
+from jotunn.components.image.embedding import ImageEmbedding
 
 df = daft.from_pydict(
     {
@@ -17,12 +17,18 @@ df = daft.from_pydict(
     }
 )
 
-siglip = SiglipEmbedding(
-    input_column="image", batch_size=8, concurrency=1, num_cpus=6, num_gpus=1
+siglip = ImageEmbedding(
+    embedder="siglip",
+    model_name="nielsr/siglip-base-patch16-224",
+    input_column="image",
+    output_column="siglip_image_embedding",
+    batch_size=8,
+    concurrency=1,
+    num_gpus=1,
 )
 
-clip = ClipImageEmbedding(
-    input_column="image", batch_size=8, concurrency=1, num_cpus=6, num_gpus=1
+clip = ImageEmbedding(
+    embedder="clip", input_column="image", batch_size=8, concurrency=1, num_gpus=1
 )
 
 df = df.with_column("image_bytes", col("urls").url.download(on_error="null"))
