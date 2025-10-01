@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 import cv2
 import daft
@@ -10,8 +11,7 @@ from jotunn.components.video.frame_extractor import FrameExtractor
 df = daft.from_pydict(
     {
         "filepath": [
-            "/video/UGi_x_L3InY.mp4",
-            "/video/IYJgv2Cuf1E.mp4",
+            f"{Path.home()}/Downloads/apple.mp4",
         ]
     }
 )
@@ -22,11 +22,11 @@ resized = Resize(input_column="image", output_column="image")
 df = extractor(df)
 df = resized(df)
 
-os.makedirs("/output_frames", exist_ok=True)
-df.write_parquet("/output_frames")
+os.makedirs(f"{Path.home()}/output_frames", exist_ok=True)
+df.write_parquet(f"{Path.home()}/output_frames")
 
 df.show()
 
-os.makedirs("/extracted_frames", exist_ok=True)
+os.makedirs(f"{Path.home()}/extracted_frames", exist_ok=True)
 for i, img in enumerate(df.to_pydict()["image"]):
-    cv2.imwrite(f"/extracted_frames/frame_{i}.webp", np.array(img))
+    cv2.imwrite(f"{Path.home()}/extracted_frames/frame_{i}.webp", np.array(img))
