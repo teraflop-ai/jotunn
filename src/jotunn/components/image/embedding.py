@@ -29,6 +29,7 @@ def create_siglip_udf(
             self,
             model_name: str = model_name,
             device: str = "cuda",
+            attn_implementation="flash_attention_2",
         ):
             self.device = torch.device(device=device)
             if self.device.type == "cpu":
@@ -42,6 +43,8 @@ def create_siglip_udf(
 
             self.model = SiglipModel.from_pretrained(
                 model_name,
+                attn_implementation=attn_implementation,
+                dtype=self.dtype,
             ).to(self.device)
             self.model = torch.compile(self.model)
             self.model.eval()
