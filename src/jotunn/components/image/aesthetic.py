@@ -2,7 +2,7 @@ from typing import Optional
 
 import daft
 import torch
-import torch.nn.functional as F
+from aesthetics_predictor import AestheticsPredictorV1
 from daft import DataType
 from transformers import (
     CLIPProcessor,
@@ -14,7 +14,7 @@ from jotunn.models.laion import MLP
 
 
 def create_laion_aesthetic_udf(
-    clip_model_name: str,
+    model_name: str,
     batch_size: Optional[int] = None,
     concurrency: Optional[int] = None,
     num_cpus: Optional[int] = None,
@@ -30,17 +30,15 @@ def create_laion_aesthetic_udf(
     class LaionAestheticUDF:
         def __init__(
             self,
-            clip_model_name: str = clip_model_name,
+            model_name: str = model_name,
             device: str = "cuda",
         ):
-            self.device = device
+            self.device = torch.device(device=device)
 
             self.clip_processor = CLIPProcessor.from_pretrained(
-                clip_model_name, use_fast=True
+                model_name, use_fast=True
             )
-            self.clip_model = CLIPVisionModelWithProjection.from_pretrained(
-                clip_model_name
-            )
+            self.clip_model = CLIPVisionModelWithProjection.from_pretrained(model_name)
             self.clip_model.to(self.device)
             self.clip_model.eval()
 
@@ -49,7 +47,7 @@ def create_laion_aesthetic_udf(
                 torch.hub.load_state_dict_from_url(
                     "https://huggingface.co/TeraflopAI/ddpo-aesthetic-predictor/resolve/main/aesthetic-model.pth",
                     map_location="cpu",
-                    progress=True,
+                    progress=False,
                 )
             )
             self.score_model.to(self.device)
@@ -69,17 +67,60 @@ def create_laion_aesthetic_udf(
             return scores
 
     return LaionAestheticUDF.with_init_args(
-        clip_model_name=clip_model_name,
+        model_name=model_name,
     )
 
 
-class LaionAestheticClassifier(Distributed):
+def create_simple_aesthetic_udf(
+    model_name: str,
+    batch_size: Optional[int] = None,
+    concurrency: Optional[int] = None,
+    num_cpus: Optional[int] = None,
+    num_gpus: Optional[int] = None,
+):
+    @daft.udf(
+        return_dtype=DataType.float32(),
+        concurrency=concurrency,
+        num_cpus=num_cpus,
+        num_gpus=num_gpus,
+        batch_size=batch_size,
+    )
+    class SimpleAestheticUDF:
+        def __init__(
+            self,
+            model_name: str = model_name,
+            device: str = "cuda",
+        ):
+            self.device = torch.device(device=device)
+            self.processor = CLIPProcessor.from_pretrained(model_name, use_fast=True)
+
+            self.model = AestheticsPredictorV1.from_pretrained(
+                model_name,
+            ).to(self.device)
+            self.model = torch.compile(self.model)
+            self.model.eval()
+
+        def __call__(self, images: daft.DataFrame) -> daft.DataFrame:
+            inputs = self.processor(images=images.to_pylist(), return_tensors="pt")
+            inputs = {k: v.to(self.device) for k, v in inputs.items()}
+            with torch.no_grad():
+                outputs = self.model(**inputs)
+            scores = outputs.logits.squeeze().float().cpu().numpy().tolist()
+            return scores
+
+    return SimpleAestheticUDF.with_init_args(
+        model_name=model_name,
+    )
+
+
+class AestheticClassifier(Distributed):
     def __init__(
         self,
-        clip_model_name: str = "openai/clip-vit-large-patch14",
+        model_name: str,
+        classifier: str = "simple",
         batch_size: int = 1,
         input_column: str = "image",
-        output_column: str = "laion_aesthetic_score",
+        output_column: str = "aesthetic_score",
         concurrency: Optional[int] = None,
         num_cpus: Optional[int] = None,
         num_gpus: Optional[int] = None,
@@ -92,13 +133,25 @@ class LaionAestheticClassifier(Distributed):
             num_cpus=num_cpus,
             num_gpus=num_gpus,
         )
-        self.clip_model_name = clip_model_name
+        self.classifier = classifier
+        self.model_name = model_name
 
     def _udf(self):
-        return create_laion_aesthetic_udf(
-            clip_model_name=self.clip_model_name,
-            batch_size=self.batch_size,
-            concurrency=self.concurrency,
-            num_cpus=self.num_cpus,
-            num_gpus=self.num_gpus,
-        )
+        if self.classifier == "laion":
+            return create_laion_aesthetic_udf(
+                model_name=self.model_name,
+                batch_size=self.batch_size,
+                concurrency=self.concurrency,
+                num_cpus=self.num_cpus,
+                num_gpus=self.num_gpus,
+            )
+        elif self.classifier == "simple":
+            return create_simple_aesthetic_udf(
+                model_name=self.model_name,
+                batch_size=self.batch_size,
+                concurrency=self.concurrency,
+                num_cpus=self.num_cpus,
+                num_gpus=self.num_gpus,
+            )
+        else:
+            raise NotImplementedError()
