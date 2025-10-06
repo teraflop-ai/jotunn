@@ -79,40 +79,6 @@ def create_sentence_transformer_udf(
     )
 
 
-class SentenceTransformersEmbed(Distributed):
-    def __init__(
-        self,
-        model_name: str,
-        max_seq_length: Optional[int] = None,
-        batch_size: int = 1,
-        input_column: str = "text",
-        output_column: str = "text_embedding",
-        concurrency: Optional[int] = None,
-        num_cpus: Optional[int] = None,
-        num_gpus: Optional[int] = None,
-    ):
-        self.model_name = model_name
-        self.max_seq_length = max_seq_length
-        super().__init__(
-            input_columns=input_column,
-            output_column=output_column,
-            batch_size=batch_size,
-            concurrency=concurrency,
-            num_cpus=num_cpus,
-            num_gpus=num_gpus,
-        )
-
-    def _udf(self):
-        return create_sentence_transformer_udf(
-            model_name=self.model_name,
-            max_seq_length=self.max_seq_length,
-            batch_size=self.batch_size,
-            concurrency=self.concurrency,
-            num_cpus=self.num_cpus,
-            num_gpus=self.num_gpus,
-        )
-
-
 def create_clip_udf(
     model_name: str,
     batch_size: Optional[int] = None,
@@ -146,7 +112,7 @@ def create_clip_udf(
                 torch_dtype=dtype,
                 attn_implementation=attn_implementation,
             ).to(self.device)
-            self.model.compile()
+            self.model = torch.compile(self.model)
             self.model.eval()
 
         def __call__(self, text: daft.DataFrame) -> daft.DataFrame:
@@ -164,16 +130,18 @@ def create_clip_udf(
     )
 
 
-class ClipTextEmbedding(Distributed):
+class TextEmbedding(Distributed):
     def __init__(
         self,
-        model_name: str = "openai/clip-vit-base-patch32",
+        model_name: str,
+        embedder: str = "clip",
         batch_size: int = 1,
-        input_column: str = "image",
-        output_column: str = "clip_text_embedding",
+        input_column: str = "text",
+        output_column: str = "text_embedding",
         concurrency: Optional[int] = None,
         num_cpus: Optional[int] = None,
         num_gpus: Optional[int] = None,
+        max_seq_length: Optional[int] = None,
     ):
         super().__init__(
             input_columns=input_column,
@@ -183,13 +151,27 @@ class ClipTextEmbedding(Distributed):
             num_cpus=num_cpus,
             num_gpus=num_gpus,
         )
+        self.embedder = embedder
         self.model_name = model_name
+        self.max_seq_length = max_seq_length
 
     def _udf(self):
-        return create_clip_udf(
-            model_name=self.model_name,
-            batch_size=self.batch_size,
-            concurrency=self.concurrency,
-            num_cpus=self.num_cpus,
-            num_gpus=self.num_gpus,
-        )
+        if self.embedder == "sentence-transformers":
+            return create_sentence_transformer_udf(
+                model_name=self.model_name,
+                max_seq_length=self.max_seq_length,
+                batch_size=self.batch_size,
+                concurrency=self.concurrency,
+                num_cpus=self.num_cpus,
+                num_gpus=self.num_gpus,
+            )
+        elif self.embedder == "clip":
+            return create_clip_udf(
+                model_name=self.model_name,
+                batch_size=self.batch_size,
+                concurrency=self.concurrency,
+                num_cpus=self.num_cpus,
+                num_gpus=self.num_gpus,
+            )
+        else:
+            raise NotImplementedError()
