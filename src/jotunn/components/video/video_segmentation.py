@@ -13,7 +13,7 @@ from scenedetect.video_splitter import split_video_ffmpeg
 class SceneSegmentation:
     def __init__(
         self,
-        output_path: Optional[str] = None,
+        output_dir: Optional[str] = None,
         threshold: float = 3.0,
         minimum_length: int = 15,
         downscale_factor: int = 64,
@@ -27,9 +27,11 @@ class SceneSegmentation:
         self.downscale_factor = downscale_factor
         self.filter_by_seconds = filter_by_seconds
         self.trim_frames = trim_frames
-        self.output_path = output_path
+        self.output_path = output_dir
 
     def __call__(self, video_path: str):
+        video_path = video_path.to_pylist()[0]
+        print(video_path)
         if not os.path.exists(video_path):
             raise FileNotFoundError(f"Video file not found: {video_path}")
 
@@ -86,4 +88,4 @@ class SceneSegmentation:
                 show_progress=False,
             )
 
-        return scenes
+        return [[[str(start), str(end)] for start, end in scenes]]
