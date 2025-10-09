@@ -14,6 +14,7 @@ from jotunn.components.distributed_base import Distributed
 
 def create_siglip_udf(
     model_name: str,
+    attn_implementation: str = "sdpa",
     batch_size: Optional[int] = None,
     concurrency: Optional[int] = None,
     num_cpus: Optional[int] = None,
@@ -31,7 +32,7 @@ def create_siglip_udf(
             self,
             model_name: str = model_name,
             device: str = "cuda",
-            attn_implementation="flash_attention_2",
+            attn_implementation=attn_implementation,
         ):
             self.device = torch.device(device=device)
             if self.device.type == "cpu":
