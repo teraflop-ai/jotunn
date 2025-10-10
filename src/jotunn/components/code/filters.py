@@ -1,0 +1,67 @@
+from typing import Optional
+
+from daft import DataType
+
+from jotunn.components.base import ScoreFilter
+
+
+class LongLinesFilter(ScoreFilter):
+    def __init__(
+        self,
+        input_column: str = "text",
+        output_column: str = "long_line",
+        daft_dtype: DataType = DataType.int32(),
+        min_threshold: Optional[float] = None,
+        max_threshold: Optional[float] = None,
+    ):
+        super().__init__(
+            input_column=input_column,
+            output_column=output_column,
+            daft_dtype=daft_dtype,
+            min_threshold=min_threshold,
+            max_threshold=max_threshold,
+        )
+
+    def _score(self, text: str) -> int:
+        return len(text.splitlines())
+    
+class AverageLineLengthFilter(ScoreFilter):
+    def __init__(
+        self,
+        input_column: str = "text",
+        output_column: str = "average_line_length",
+        daft_dtype: DataType = DataType.int32(),
+        min_threshold: Optional[float] = None,
+        max_threshold: Optional[float] = None,
+    ):
+        super().__init__(
+            input_column=input_column,
+            output_column=output_column,
+            daft_dtype=daft_dtype,
+            min_threshold=min_threshold,
+            max_threshold=max_threshold,
+        )
+
+    def _score(self, text: str) -> int:
+        texts = text.splitlines()
+        return sum(len(t) for t in texts) / len(texts)
+    
+class MaximumLineLengthFilter(ScoreFilter):
+    def __init__(
+        self,
+        input_column: str = "text",
+        output_column: str = "maximum_line_length",
+        daft_dtype: DataType = DataType.int32(),
+        min_threshold: Optional[float] = None,
+        max_threshold: Optional[float] = None,
+    ):
+        super().__init__(
+            input_column=input_column,
+            output_column=output_column,
+            daft_dtype=daft_dtype,
+            min_threshold=min_threshold,
+            max_threshold=max_threshold,
+        )
+
+    def _score(self, text: str) -> int:
+        return max(len(t) for t in text.splitlines())
