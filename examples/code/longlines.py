@@ -1,6 +1,10 @@
 import daft
 
-from jotunn.components.code.filters import LongLinesFilter, MaximumLineLengthFilter, AverageLineLengthFilter
+from jotunn.components.code.filters import (
+    AverageLineLengthFilter,
+    LongLinesFilter,
+    MaximumLineLengthFilter,
+)
 
 df = daft.from_pydict(
     {
@@ -10,7 +14,10 @@ df = daft.from_pydict(
             "Galleys with good oars",
             "Sail to distant shores",
             "a" * 10000,
-            'This is a line.\n' * 100000,
+            "short line\nanother short line",
+            "this is a very long line " * 60,
+            "normal\nok\nfine",
+            "This is a line.\n" * 100000,
         ],
     }
 )
