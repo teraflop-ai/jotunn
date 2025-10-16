@@ -83,3 +83,13 @@ Qwen Image
     year    = {2025},
 }
 ```
+```bibtex
+@misc{eva02_large_patch14_448_dbv4_full_2024,
+  title        = {EVA02-Large-Patch14-448 Anime Image Tagger},
+  author       = {narugo1992 and Deep Generative anime Hobbyist Syndicate (DeepGHS)},
+  year         = {2024},
+  howpublished = {\url{https://huggingface.co/animetimm/eva02_large_patch14_448.dbv4-full}},
+  note         = {A large-scale anime-style image classification model based on EVA02-Large architecture, fine-tuned on Danbooru dataset for multi-label tagging with 12,476 tags including general, character, and rating categories. Model parameters: 316.8M, input resolution: 448×448.},
+  license      = {GPL-3.0}
+}
+```
