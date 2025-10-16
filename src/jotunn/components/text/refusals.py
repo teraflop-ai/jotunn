@@ -1,0 +1,93 @@
+from typing import Optional
+
+import daft
+import torch
+from daft import DataType
+
+from jotunn.components.distributed_base import Distributed
+
+
+def create_refusal_udf(
+    model_name: str,
+    batch_size: Optional[int] = None,
+    concurrency: Optional[int] = None,
+    num_cpus: Optional[int] = None,
+    num_gpus: Optional[int] = None,
+):
+    @daft.udf(
+        return_dtype=DataType.int8(),
+        concurrency=concurrency,
+        num_cpus=num_cpus,
+        num_gpus=num_gpus,
+        batch_size=batch_size,
+    )
+    class RefusalUDF:
+        def __init__(
+            self,
+            model_name: str = model_name,
+            device: str = "cuda",
+            dtype: torch.dtype = torch.bfloat16,
+            attn_implementation: str = "sdpa",
+        ):
+            from transformers import AutoModelForSequenceClassification, AutoTokenizer
+
+            self.device = device
+
+            self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+
+            self.model = AutoModelForSequenceClassification.from_pretrained(
+                model_name,
+                torch_dtype=dtype,
+                attn_implementation=attn_implementation,
+            ).to(self.device)
+            self.model.compile()
+            self.model.eval()
+
+        def __call__(self, text_col: daft.DataFrame) -> daft.DataFrame:
+            inputs = self.tokenizer(
+                text_col.to_pylist(),
+                return_tensors="pt",
+                padding="longest",
+                truncation=True,
+            ).to(self.device)
+
+            with torch.no_grad():
+                outputs = self.model(**inputs)
+                probabilities = torch.nn.functional.softmax(outputs.logits, dim=-1)
+                predictions = torch.argmax(probabilities, dim=-1)
+            return predictions.cpu().tolist()
+
+    return RefusalUDF.with_init_args(
+        model_name=model_name,
+    )
+
+
+class RefusalClassifier(Distributed):
+    def __init__(
+        self,
+        model_name: str = "NousResearch/Minos-v1",
+        batch_size: int = 1,
+        input_column: str = "text",
+        output_column: str = "refusal_score",
+        concurrency: Optional[int] = None,
+        num_cpus: Optional[int] = None,
+        num_gpus: Optional[int] = None,
+    ):
+        super().__init__(
+            input_columns=input_column,
+            output_column=output_column,
+            batch_size=batch_size,
+            concurrency=concurrency,
+            num_cpus=num_cpus,
+            num_gpus=num_gpus,
+        )
+        self.model_name = model_name
+
+    def _udf(self):
+        return create_refusal_udf(
+            model_name=self.model_name,
+            batch_size=self.batch_size,
+            concurrency=self.concurrency,
+            num_cpus=self.num_cpus,
+            num_gpus=self.num_gpus,
+        )
