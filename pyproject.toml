@@ -1,6 +1,6 @@
 [project]
 name = "jotunn"
-version = "0.1.261"
+version = "0.1.01"
 description = "A petabyte scale data processing framework for AI models using Ray."
 readme = "README.md"
 requires-python = ">=3.10"
