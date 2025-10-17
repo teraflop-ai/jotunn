@@ -26,6 +26,7 @@ dependencies = [
     "pysimdjson>=7.0.2",
     "rapidfuzz>=3.14.1",
     "ray[data]>=2.47.1",
+    "resiliparse>=0.15.2",
     "transformers>=4.53.3",
     "usearch>=2.21.0",
     "xxhash>=3.5.0",
@@ -66,3 +67,8 @@ all = [
 
 [tool.uv]
 package = true
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+]

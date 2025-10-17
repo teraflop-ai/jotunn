@@ -166,14 +166,13 @@ def create_florence_udf(
 
         def __call__(self, images: daft.DataFrame) -> daft.DataFrame:
             inputs = (
-                self.processor(text=self.task, images=images.to_pylist(), return_tensors="pt")
+                self.processor(text=[self.task] * len(images), images=images.to_pylist(), return_tensors="pt")
                 .to(self.device)
                 .to(self.dtype)
             )
 
             outputs = self.model.generate(
-                input_ids=inputs["input_ids"],
-                pixel_values=inputs["pixel_values"],
+                **inputs,
                 max_new_tokens=self.max_new_tokens,
                 early_stopping=self.early_stopping,
                 do_sample=self.do_sample,
