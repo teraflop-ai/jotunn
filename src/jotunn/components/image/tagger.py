@@ -107,8 +107,8 @@ def create_weeb_udf(
             results = []
             for i in range(predictions.shape[0]):
                 pred = predictions[i]
-                mask = pred >= self.df_tags['best_threshold']
-                tags = self.df_tags['name'][mask].tolist()
+                mask = pred >= self.df_tags["best_threshold"]
+                tags = self.df_tags["name"][mask].tolist()
                 scores = pred[mask].tolist()
                 results.append({tag: float(score) for tag, score in zip(tags, scores)})
             return results
@@ -138,7 +138,7 @@ def create_florence_udf(
             early_stopping=False,
             do_sample=False,
             num_beams=3,
-            task = "<CAPTION>",
+            task="<CAPTION>",
             device: str = "cuda",
         ):
             self.device = torch.device(device=device)
@@ -148,12 +148,11 @@ def create_florence_udf(
                 self.dtype = (
                     torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
                 )
-            self.processor = AutoProcessor.from_pretrained(
-                model_name
-            )
+            self.processor = AutoProcessor.from_pretrained(model_name)
 
             self.model = Florence2ForConditionalGeneration.from_pretrained(
-                model_name, torch_dtype=self.dtype,
+                model_name,
+                torch_dtype=self.dtype,
             ).to(self.device)
             self.model = torch.compile(self.model)
             self.model.eval()
@@ -166,7 +165,11 @@ def create_florence_udf(
 
         def __call__(self, images: daft.DataFrame) -> daft.DataFrame:
             inputs = (
-                self.processor(text=[self.task] * len(images), images=images.to_pylist(), return_tensors="pt")
+                self.processor(
+                    text=[self.task] * len(images),
+                    images=images.to_pylist(),
+                    return_tensors="pt",
+                )
                 .to(self.device)
                 .to(self.dtype)
             )
