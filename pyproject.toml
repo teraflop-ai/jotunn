@@ -1,7 +1,7 @@
 [project]
 name = "jotunn"
 version = "0.1.13"
-description = "A petabyte scale data processing framework for AI models using Ray."
+description = "A petabyte scale data processing framework for AI models using Daft and Ray."
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [
@@ -23,10 +23,9 @@ dependencies = [
     "matplotlib>=3.10.6",
     "memray>=1.18.0",
     "open-clip-torch>=3.2.0",
-    "pysimdjson>=7.0.2",
+    "pymupdf>=1.26.5",
     "rapidfuzz>=3.14.1",
     "ray[data]>=2.47.1",
-    "resiliparse>=0.15.2",
     "transformers>=4.53.3",
     "usearch>=2.21.0",
     "xxhash>=3.5.0",
@@ -37,6 +36,7 @@ text = [
     "chonkie>=1.1.0",
     "sentence-transformers>=5.0.0",
     "vllm>=0.9.2",
+    "resiliparse>=0.15.2",
 ]
 audio = [
     "librosa>=0.11.0",
@@ -58,11 +58,8 @@ image = [
     "simple-aesthetics-predictor>=0.1.2",
     "vllm>=0.9.2",
 ]
-anyscale = [
-    "anyscale>=0.26.58",
-]
 all = [
-    "jotunn[text,audio,video,image,anyscale]",
+    "jotunn[text,audio,video,image]",
 ]
 
 [tool.uv]

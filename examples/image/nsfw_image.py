@@ -1,14 +1,33 @@
 import daft
 from daft import col
 
-from jotunn.components.image.nsfw import FalconsNSFWClassifier
+from jotunn.components.image.nsfw import NSFWClassifier
 
 df = daft.read_huggingface("huggan/wikiart")
 df = df.with_column("image", col("image")["bytes"].image.decode())
 
-classifier = FalconsNSFWClassifier(
-    input_column="image", batch_size=8, concurrency=1, num_cpus=6, num_gpus=1
+marqo = NSFWClassifier(
+    classifier="marqo",
+    model_name="hf_hub:Marqo/nsfw-image-detection-384",
+    input_column="image",
+    output_column="marqo_nsfw",
+    batch_size=12,
+    concurrency=1,
+    num_cpus=6,
+    num_gpus=1,
 )
 
-df = classifier(df)
+falcons = NSFWClassifier(
+    classifier="falcons",
+    model_name="Falconsai/nsfw_image_detection",
+    input_column="image",
+    output_column="falcons_nsfw",
+    batch_size=12,
+    concurrency=1,
+    num_cpus=6,
+    num_gpus=1,
+)
+
+df = marqo(df)
+df = falcons(df)
 df.show()
