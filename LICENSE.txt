@@ -1,3 +1,24 @@
+Jotunn Dual License Notice
+===================================
+
+Jotunn is available under two different licensing options:
+
+1. **AGPL-3.0 License** (this file) - For open source use
+   - Free for open-source projects
+   - Requires compliance with AGPL-3.0 terms
+   - See full license text below
+
+2. **Commercial License** - For proprietary/commercial use
+   - No source code disclosure requirements
+   - Full commercial support
+   - Available for purchase at https://teraflopai.com/pricing
+
+For licensing questions, contact us at https://teraflopai.com/support
+
+The full AGPL-3.0 license text follows:
+
+---
+
                     GNU AFFERO GENERAL PUBLIC LICENSE
                        Version 3, 19 November 2007
 
