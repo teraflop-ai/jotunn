@@ -75,6 +75,30 @@ Qwen Image
     - [x] Resolution Filter - Same as Stage 1.
     - [] Image Categorization and Tagging 
 
+Step-Video-T2V
+- Stage 1
+    - [x] Video Segmentation
+    - [x] Frame Extraction
+    - [x] Duration Filter
+    - [x] Clip Score Filter
+- Stage 2
+    - [x] Aesthetic Filter
+    - [x] NSFW Filter
+    - [x] Resolution Filter
+    - [x] Watermark Filter
+- Stage 3
+    - [x] Motion Filter - partial
+    - [x] Blur Filter
+- Stage 4
+    - [] Source Filter - unclear what this is to me
+    - [x] Saturation Filter - partial
+- Stage 5
+    - [x] Subtitle Filter
+    - [] Black Border Filter
+    - [x] Video Captioning
+- Stage 6
+    - [x] Concept Balancing Filter - partial
+
 ## Citation
 ```bibtex
 @misc{shippole2025jotunn,
