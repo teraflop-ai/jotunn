@@ -5,8 +5,8 @@ import daft
 import open_clip
 import torch
 from daft import DataType
-from huggingface_hub import hf_hub_download
 from PIL import Image
+from timm.utils import reparameterize_model
 from transformers import AutoProcessor, CLIPModel, CLIPProcessor, SiglipModel
 
 from jotunn.components.distributed_base import Distributed
@@ -132,8 +132,8 @@ def create_clip_udf(
 
 def create_openclip_udf(
     model_name: str,
-    repo_id: str,
-    filename: str,
+    pretrained: str,
+    reparameterize: bool,
     batch_size: Optional[int] = None,
     concurrency: Optional[int] = None,
     num_cpus: Optional[int] = None,
@@ -151,8 +151,8 @@ def create_openclip_udf(
             self,
             model_name: str = model_name,
             device: str = "cuda",
-            repo_id: str = repo_id,
-            filename: str = filename,
+            pretrained: str = pretrained,
+            reparameterize: bool = reparameterize,
         ):
             self.device = torch.device(device=device)
             if self.device.type == "cpu":
@@ -162,19 +162,13 @@ def create_openclip_udf(
                     torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
                 )
 
-            if repo_id and filename:
-                checkpoint = hf_hub_download(repo_id=repo_id, filename=filename)
-                model_name = repo_id.split("/")[1]
-            else:
-                model_name, checkpoint = model_name.split("/")
-
             self.model, _, self.preprocess = open_clip.create_model_and_transforms(
                 model_name=model_name,  # 'ViT-B-32'
-                pretrained=checkpoint,  # 'laion2b_s34b_b79k'
+                pretrained=pretrained,  # 'laion2b_s34b_b79k'
                 device=self.device,
             )
-            if "mobileclip" in filename:
-                self.model = self.reparameterize_model(self.model)
+            if reparameterize:
+                self.model = reparameterize_model(self.model)
             self.model = torch.compile(self.model)
             self.model.eval()
 
@@ -197,24 +191,6 @@ def create_openclip_udf(
             batch = torch.stack(inputs).to(device=self.device, dtype=self.dtype)
             return batch
 
-        def reparameterize_model(self, model: torch.nn.Module) -> torch.nn.Module:
-            """Method returns a model where a multi-branched structure
-                used in training is re-parameterized into a single branch
-                for inference.
-
-            Args:
-                model: MobileOne model in train mode.
-
-            Returns:
-                MobileOne model in inference mode.
-            """
-            # Avoid editing original graph
-            model = copy.deepcopy(model)
-            for module in model.modules():
-                if hasattr(module, "reparameterize"):
-                    module.reparameterize()
-            return model
-
     return OpenClipUDF.with_init_args(
         model_name=model_name,
     )
@@ -231,8 +207,8 @@ class ImageEmbedding(Distributed):
         concurrency: Optional[int] = None,
         num_cpus: Optional[int] = None,
         num_gpus: Optional[int] = None,
-        repo_id: Optional[str] = None,
-        filename: Optional[str] = None,
+        pretrained: Optional[str] = None,
+        reparameterize: Optional[bool] = False,
     ):
         super().__init__(
             input_columns=input_column,
@@ -244,8 +220,8 @@ class ImageEmbedding(Distributed):
         )
         self.embedder = embedder
         self.model_name = model_name
-        self.repo_id = repo_id
-        self.filename = filename
+        self.pretrained = pretrained
+        self.reparameterize = reparameterize
 
     def _udf(self):
         if self.embedder == "clip":
@@ -267,8 +243,8 @@ class ImageEmbedding(Distributed):
         elif self.embedder == "openclip":
             return create_openclip_udf(
                 model_name=self.model_name,
-                repo_id=self.repo_id,
-                filename=self.filename,
+                pretrained=self.pretrained,
+                reparameterize=self.reparameterize,
                 batch_size=self.batch_size,
                 concurrency=self.concurrency,
                 num_cpus=self.num_cpus,

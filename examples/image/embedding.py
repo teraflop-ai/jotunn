@@ -28,13 +28,14 @@ clip = ImageEmbedding(
 
 openclip = ImageEmbedding(
     embedder="openclip",
-    repo_id="apple/MobileCLIP2-S3",
-    filename="mobileclip2_s3.pt",
+    model_name="MobileCLIP2-S3",
+    pretrained="dfndr2b",
     input_column="image",
     output_column="openclip_image_embedding",
     batch_size=8,
     concurrency=1,
     num_gpus=1,
+    reparameterize=True,
 )
 
 df = siglip(df)

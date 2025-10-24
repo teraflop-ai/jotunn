@@ -8,6 +8,8 @@ from PIL import Image
 
 from jotunn.components.distributed_base import Distributed
 
+torch.set_float32_matmul_precision("high")
+
 
 def create_falcon_nsfw_udf(
     model_name: str,
