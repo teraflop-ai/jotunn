@@ -77,7 +77,7 @@ Qwen Image
 
 Step-Video-T2V
 - Stage 1
-    - [x] Video Segmentation
+    - [x] Video Scene Segmentation
     - [x] Frame Extraction
     - [x] Duration Filter
     - [x] Clip Score Filter
@@ -98,6 +98,27 @@ Step-Video-T2V
     - [x] Video Captioning
 - Stage 6
     - [x] Concept Balancing Filter - partial
+
+HunyuanVideo
+- Stage 1
+    - [x] Video Scene Segmentation
+    - [x] Deduplication
+    - [x] Embedding
+    - [x] Concept Balancing - partial
+    - [x] Optical Flow
+    - [x] Duration Filter
+    - [x] Resolution Filter
+    - [] Transnet v2
+- Stage 2
+    - [x] Laplacian Blur Filter
+    - [x] Intensive Text Filter
+    - [] Visual Blur Filter - needs to be trained
+- Stage 3
+    - [] Dover - not sure this is worth adding. only for completeness
+    - [] YOLOX Watermark, Borders, Logos - needs to be trained
+- Stage 4
+    - [x] Captioning
+
 
 ## Citation
 ```bibtex
