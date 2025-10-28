@@ -1,4 +1,3 @@
-import copy
 from typing import Optional
 
 import daft
@@ -163,8 +162,8 @@ def create_openclip_udf(
                 )
 
             self.model, _, self.preprocess = open_clip.create_model_and_transforms(
-                model_name=model_name,  # 'ViT-B-32'
-                pretrained=pretrained,  # 'laion2b_s34b_b79k'
+                model_name=model_name,
+                pretrained=pretrained,
                 device=self.device,
             )
             if reparameterize:
@@ -193,14 +192,16 @@ def create_openclip_udf(
 
     return OpenClipUDF.with_init_args(
         model_name=model_name,
+        pretrained=pretrained,
+        reparameterize=reparameterize,
     )
 
 
 class ImageEmbedding(Distributed):
     def __init__(
         self,
-        embedder: str = "clip",  # siglip
-        model_name: str = "openai/clip-vit-base-patch32",
+        embedder: str,
+        model_name: str,
         batch_size: int = 1,
         input_column: str = "image",
         output_column: str = "image_embedding",
