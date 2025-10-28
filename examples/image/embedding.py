@@ -1,10 +1,14 @@
 import daft
 from daft import col
+from pathlib import Path
 
 from jotunn.components.image.embedding import ImageEmbedding
+from jotunn.components.image.resize import Resize
 
-df = daft.read_huggingface("huggan/wikiart")
+df = daft.read_parquet(f"{Path.home()}/wikiart/data/**")
 df = df.with_column("image", col("image")["bytes"].image.decode())
+
+resize = Resize(output_column="image", width=224, height=224)
 
 siglip = ImageEmbedding(
     embedder="siglip",
@@ -32,13 +36,15 @@ openclip = ImageEmbedding(
     pretrained="dfndr2b",
     input_column="image",
     output_column="openclip_image_embedding",
-    batch_size=8,
+    batch_size=256,
     concurrency=1,
     num_gpus=1,
     reparameterize=True,
 )
 
+df = resize(df)
+
 df = siglip(df)
 df = clip(df)
 df = openclip(df)
-df.show()
+df.write_parquet("embeddings")
