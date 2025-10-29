@@ -28,6 +28,7 @@ dependencies = [
     "ray[data]>=2.47.1",
     "transformers>=4.53.3",
     "usearch>=2.21.0",
+    "wtpsplit-lite>=0.2.0",
     "xxhash>=3.5.0",
 ]
 [project.optional-dependencies]

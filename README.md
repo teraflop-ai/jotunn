@@ -138,6 +138,7 @@ Wan
 
 
 ## Citation
+If you find this framework useful, please feel free to cite:
 ```bibtex
 @misc{shippole2025jotunn,
     title   = {Jotunn: Distributed Multimodal Data Processing at Petabyte Scale},
@@ -145,6 +146,7 @@ Wan
     year    = {2025},
 }
 ```
+## Acknowledgements
 ```bibtex
 @misc{eva02_large_patch14_448_dbv4_full_2024,
   title        = {EVA02-Large-Patch14-448 Anime Image Tagger},

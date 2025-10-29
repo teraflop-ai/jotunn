@@ -1932,6 +1932,7 @@ dependencies = [
     { name = "ray", extra = ["data"] },
     { name = "transformers" },
     { name = "usearch" },
+    { name = "wtpsplit-lite" },
     { name = "xxhash" },
 ]
 
@@ -2022,6 +2023,7 @@ requires-dist = [
     { name = "video-reader-rs", marker = "extra == 'video'", specifier = ">=0.2.10" },
     { name = "vllm", marker = "extra == 'image'", specifier = ">=0.9.2" },
     { name = "vllm", marker = "extra == 'text'", specifier = ">=0.9.2" },
+    { name = "wtpsplit-lite", specifier = ">=0.2.0" },
     { name = "xxhash", specifier = ">=3.5.0" },
 ]
 provides-extras = ["text", "audio", "video", "image", "all"]
@@ -6846,6 +6848,21 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/b3/8f/705086c9d734d3b663af0e9bb3d4de6578d08f46b1b101c2442fd9aecaa2/win32_setctime-1.2.0.tar.gz", hash = "sha256:ae1fdf948f5640aae05c511ade119313fb6a30d7eabe25fef9764dca5873c4c0", size = 4867 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/e1/07/c6fe3ad3e685340704d314d765b7912993bcb8dc198f0e7a89382d37974b/win32_setctime-1.2.0-py3-none-any.whl", hash = "sha256:95d644c4e708aba81dc3704a116d8cbc974d70b3bdb8be1d150e36be6e9d1390", size = 4083 },
+]
+
+[[package]]
+name = "wtpsplit-lite"
+version = "0.2.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "huggingface-hub" },
+    { name = "numpy" },
+    { name = "onnxruntime" },
+    { name = "tokenizers" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/98/79/2f74be2db6b03041fc3b256696da66c7dfd6ae2552907f950b7e071659f2/wtpsplit_lite-0.2.0.tar.gz", hash = "sha256:aaf9168cdbba9a20671df93dea0bd6ffb6f3a39f1b74cdd86ab3e81a073e97e8", size = 35877 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/34/20/f9453db785f3dbb4dd6b44aa073a3b2fcbde5e91b8746c769d348345d105/wtpsplit_lite-0.2.0-py3-none-any.whl", hash = "sha256:3277a711f5c4c16162901fc37426557f4eb6eb6d90ba8fca276433fa9aa5fa4c", size = 16042 },
 ]
 
 [[package]]
