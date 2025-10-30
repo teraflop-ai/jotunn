@@ -1,0 +1,93 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+*.whl
+.eggs/
+parts/
+sdist/
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py.cover
+.pytest_cache/
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.pdm-python
+.pixi
+__pypackages__/
+
+# Jupyter / IPython
+.ipynb_checkpoints
+profile_default/
+ipython_config.py
+
+# PyBuilder
+.pybuilder/
+target/
+
+# Sphinx documentation
+docs/_build/
+site/
+
+# IDEs / Editors
+.idea/
+.vscode/
+.spyderproject
+.spyproject
+.ropeproject
+
+# Pyre / mypy / pytype caches
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+.ruff_cache/
+cython_debug/
+
+# Framework-specific / generated files
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+instance/
+.webassets-cache
+.scrapy
+celerybeat-schedule
+celerybeat.pid
+.marimo/
+.streamlit/secrets.toml
+.abstra/
+.cursorignore
+.cursorindexingignore
