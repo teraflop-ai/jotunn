@@ -137,6 +137,11 @@ Wan
 - [x] Captioning 
 
 
+## Contributing
+```python
+uv pip install -e ".[all]"
+```
+
 ## Citation
 If you find this framework useful, please feel free to cite:
 ```bibtex
