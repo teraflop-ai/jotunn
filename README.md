@@ -141,6 +141,10 @@ Wan
 ```python
 uv pip install -e ".[all]"
 ```
+```python
+ruff check --select I --fix .
+ruff format .
+```
 
 ## Citation
 If you find this framework useful, please feel free to cite:
