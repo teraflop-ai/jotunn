@@ -10,8 +10,6 @@ ENV UV_TOOL_BIN_DIR=/usr/local/bin
 ENV UV_PYTHON=3.12
 
 RUN apt-get update && apt-get install -y \
-    python3-pip \
-    python3-dev \
     curl \
     build-essential \
     gcc \
@@ -41,4 +39,4 @@ ENV PATH="/workspace/.venv/bin:$PATH"
 
 WORKDIR /workspace
 
-CMD ["python3"]
+CMD ["python"]
