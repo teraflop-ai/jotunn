@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 import daft
 import pandas as pd
@@ -198,11 +198,91 @@ def create_florence_udf(
     )
 
 
+def create_vllm_image_tagger_udf(
+    model_name: str,
+    prompt: str,
+    max_tokens: Optional[int] = None,
+    temperature: Optional[float] = None,
+    tags: Optional[List[str]] = None,
+    batch_size: Optional[int] = None,
+    concurrency: Optional[int] = None,
+    num_cpus: Optional[int] = None,
+    num_gpus: Optional[int] = None,
+):
+    @daft.udf(
+        return_dtype=DataType.string(),
+        concurrency=concurrency,
+        num_cpus=num_cpus,
+        num_gpus=num_gpus,
+        batch_size=batch_size,
+    )
+    class VllmImageCaptionUDF:
+        def __init__(
+            self,
+            model_name: str = model_name,
+            prompt: str = prompt,
+            max_tokens: int = max_tokens,
+            temperature: float = temperature,
+        ):
+            from vllm import LLM, SamplingParams
+            from vllm.sampling_params import StructuredOutputsParams
+
+            if tags:
+                structured_outputs_params = StructuredOutputsParams(
+                    json={
+                        "type": "object",
+                        "properties": {
+                            "tags": {
+                                "type": "array",
+                                "items": {"type": "string", "enum": tags},
+                            }
+                        },
+                        "required": ["tags"],
+                    }
+                )
+            else:
+                structured_outputs_params = None
+
+            self.vllm_engine = LLM(model=model_name, trust_remote_code=True)
+            self.sampling_params = SamplingParams(
+                max_tokens=max_tokens,
+                temperature=temperature,
+                structured_outputs=structured_outputs_params,
+            )
+            self.prompt = prompt
+
+        def __call__(self, images: daft.DataFrame) -> daft.DataFrame:
+            images = [Image.fromarray(img) for img in images]
+            vllm_inputs = [
+                {
+                    "prompt": self.prompt,
+                    "multi_modal_data": {"image": image},
+                }
+                for image in images
+            ]
+            outputs = self.vllm_engine.generate(vllm_inputs, self.sampling_params)
+            generated_text = []
+            for output in outputs:
+                generated_text.append(output.outputs[0].text)
+            return generated_text
+
+    return VllmImageCaptionUDF.with_init_args(
+        model_name=model_name,
+        prompt=prompt,
+        max_tokens=max_tokens,
+        temperature=temperature,
+    )
+
+
 class ImageTagger(Distributed):
     def __init__(
         self,
         model_name: str,
-        tagger: str = "weeb",
+        tagger: str = "vllm",
+        prompt: Optional[str] = None,
+        max_tokens: Optional[int] = 256,
+        temperature: Optional[float] = 0.2,
+        tags: Optional[List[str]] = None,
         batch_size: int = 1,
         input_column: str = "image",
         output_column: str = "tags",
@@ -220,9 +300,25 @@ class ImageTagger(Distributed):
         )
         self.tagger = tagger
         self.model_name = model_name
+        self.prompt = prompt
+        self.temperature = temperature
+        self.max_tokens = max_tokens
+        self.tags = tags
 
     def _udf(self):
-        if self.tagger == "florence":
+        if self.tagger == "vllm":
+            return create_vllm_image_tagger_udf(
+                model_name=self.model_name,
+                prompt=self.prompt,
+                max_tokens=self.max_tokens,
+                temperature=self.temperature,
+                tags=self.tags,
+                batch_size=self.batch_size,
+                concurrency=self.concurrency,
+                num_cpus=self.num_cpus,
+                num_gpus=self.num_gpus,
+            )
+        elif self.tagger == "florence":
             return create_florence_udf(
                 model_name=self.model_name,
                 batch_size=self.batch_size,
