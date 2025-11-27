@@ -61,7 +61,7 @@ Qwen Image
     - [] Synthetic Text Rendering
     - [x] Intensive Text Filter
     - [] Small Character Filter
-    - [] Image Categorization and Tagging
+    - [x] Image Categorization and Tagging
 - Stage 5
     - [x] Image Quality Filter - It is unclear whether this is a combination of different heuristics. 
     - [x] Resolution Filter - Same as Stage 1.
@@ -69,11 +69,11 @@ Qwen Image
     - [] Abnormal Element Filter - Needs to be trained but the data is being collected.
 - Stage 6
     - [] Face Mosaic Filter
-    - [] Image Categorization and Tagging
+    - [x] Image Categorization and Tagging
     - [x] Synthetic Captioning
 - Stage 7
     - [x] Resolution Filter - Same as Stage 1.
-    - [] Image Categorization and Tagging 
+    - [x] Image Categorization and Tagging 
 
 Step-Video-T2V
 - Stage 1
