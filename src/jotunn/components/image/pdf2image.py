@@ -1,6 +1,7 @@
-import pymupdf
 import daft
-from daft import col, DataType
+import pymupdf
+from daft import DataType, col
+
 
 class PDF2Image:
     def __init__(
@@ -22,8 +23,8 @@ class PDF2Image:
             self.output_column,
             col(self.input_column).apply(
                 lambda x: self.pdf_to_images(x, self.dpi, self.image_format),
-                return_dtype=self.daft_dtype
-            )
+                return_dtype=self.daft_dtype,
+            ),
         )
         df = df.explode(col(self.output_column))
         df = df.with_column(self.output_column, col(self.output_column).image.decode())
