@@ -51,7 +51,7 @@ start_time = time.time()
 
 for i in tqdm(range(0, n, batch_size), desc="Scanning index in batches"):
     query_keys = keys[i : i + batch_size]
-    query_vecs = np.stack([index[k] for k in query_keys])
+    query_vecs = index.get(query_keys)
 
     results = index.search(query_vecs, count=search_k, threads=8)
 
