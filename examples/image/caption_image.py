@@ -9,7 +9,7 @@ df = df.with_column("image", col("image")["bytes"].image.decode())
 prompt = """\
 <|im_start|>system\nYou are a helpful assistant.<|im_end|>\n\
 <|im_start|>user\n<|vision_start|><|image_pad|><|vision_end|>\
-f"Write a detailed description of what is in the image?<|im_end|>\n\
+Write a detailed description of what is in the image?<|im_end|>\n\
 <|im_start|>assistant\n"""
 
 captioner = VllmImageCaption(

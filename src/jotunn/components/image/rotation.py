@@ -16,12 +16,12 @@ class Rotation(ScoreFilter):
         daft_dtype: DataType = DataType.int8(),
         orientation: Optional[int] = 1,
     ):
-        self.orientation = orientation
         super().__init__(
             input_column=input_column,
             output_column=output_column,
             daft_dtype=daft_dtype,
         )
+        self.orientation = orientation
 
     def _score(self, image_bytes: bytes) -> int:
         tags = exifread.process_file(BytesIO(image_bytes))
