@@ -1,6 +1,7 @@
 import daft
 from daft import col
 
+from jotunn.utils.prompt_templates import tagging_prompts
 from jotunn.components.image.tagger import ImageTagger
 
 df = daft.read_huggingface("huggan/wikiart")
@@ -8,21 +9,7 @@ df = df.with_column("image", col("image")["bytes"].image.decode())
 
 tags = ["trees", "person", "suit", "hat", "landscape", "sky", "boat", "flowers"]
 
-prompt = f"""
-<image>
-
-You must return ONLY the tags from the allowed tag list that truly apply to the image.
-
-Return the output ONLY in EXACT JSON format:
-
-{{
-  "tags": ["tag1", "tag2"]
-}}
-
-Where each tag must be one of the allowed tags below and must NOT include anything else. There should only be one of each tag.
-
-Allowed tags: {tags}
-"""
+prompt = tagging_prompts(template="qwen", tags=tags)
 
 florence = ImageTagger(
     tagger="florence",
@@ -42,10 +29,11 @@ weeb = ImageTagger(
 
 vllm = ImageTagger(
     tagger="vllm",
-    model_name="OpenGVLab/InternVL3_5-4B-Instruct",
+    model_name="Qwen/Qwen3-VL-4B-Instruct",
     prompt=prompt,
     tags=tags,
     max_tokens=128,
+    max_model_len=4096,
     temperature=0.0,
     batch_size=1,
     concurrency=1,

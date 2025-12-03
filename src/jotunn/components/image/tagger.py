@@ -206,6 +206,7 @@ def create_vllm_image_tagger_udf(
     max_tokens: Optional[int] = None,
     temperature: Optional[float] = None,
     tags: Optional[List[str]] = None,
+    max_model_len: Optional[int] = None,
     batch_size: Optional[int] = None,
     concurrency: Optional[int] = None,
     num_cpus: Optional[int] = None,
@@ -225,6 +226,8 @@ def create_vllm_image_tagger_udf(
             prompt: str = prompt,
             max_tokens: int = max_tokens,
             temperature: float = temperature,
+            tags: List[str] = tags,
+            max_model_len: int = max_model_len
         ):
             if tags:
                 structured_outputs_params = StructuredOutputsParams(
@@ -242,7 +245,7 @@ def create_vllm_image_tagger_udf(
             else:
                 structured_outputs_params = None
 
-            self.vllm_engine = LLM(model=model_name, trust_remote_code=True)
+            self.vllm_engine = LLM(model=model_name, trust_remote_code=True, max_model_len=max_model_len)
             self.sampling_params = SamplingParams(
                 max_tokens=max_tokens,
                 temperature=temperature,
@@ -270,6 +273,8 @@ def create_vllm_image_tagger_udf(
         prompt=prompt,
         max_tokens=max_tokens,
         temperature=temperature,
+        tags=tags,
+        max_model_len=max_model_len
     )
 
 
@@ -282,6 +287,7 @@ class ImageTagger(Distributed):
         max_tokens: Optional[int] = 256,
         temperature: Optional[float] = 0.2,
         tags: Optional[List[str]] = None,
+        max_model_len: Optional[int] = None,
         batch_size: int = 1,
         input_column: str = "image",
         output_column: str = "tags",
@@ -303,6 +309,7 @@ class ImageTagger(Distributed):
         self.temperature = temperature
         self.max_tokens = max_tokens
         self.tags = tags
+        self.max_model_len = max_model_len
 
     def _udf(self):
         if self.tagger == "vllm":
@@ -312,6 +319,7 @@ class ImageTagger(Distributed):
                 max_tokens=self.max_tokens,
                 temperature=self.temperature,
                 tags=self.tags,
+                max_model_len=self.max_model_len,
                 batch_size=self.batch_size,
                 concurrency=self.concurrency,
                 num_cpus=self.num_cpus,
