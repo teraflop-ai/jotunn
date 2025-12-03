@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import List, Optional
 
 import daft
 import pandas as pd
@@ -9,6 +9,8 @@ from huggingface_hub import hf_hub_download
 from PIL import Image
 from torchvision import transforms
 from transformers import AutoProcessor, Florence2ForConditionalGeneration
+from vllm import LLM, SamplingParams
+from vllm.sampling_params import StructuredOutputsParams
 
 from jotunn.components.distributed_base import Distributed
 
@@ -224,9 +226,6 @@ def create_vllm_image_tagger_udf(
             max_tokens: int = max_tokens,
             temperature: float = temperature,
         ):
-            from vllm import LLM, SamplingParams
-            from vllm.sampling_params import StructuredOutputsParams
-
             if tags:
                 structured_outputs_params = StructuredOutputsParams(
                     json={
