@@ -1,10 +1,12 @@
+from pathlib import Path
+
 import daft
 from daft import col
 
 from jotunn.components.image.intensive_text import IntensiveText
 
-df = daft.read_huggingface("huggan/wikiart")
-df = df.with_column("image", col("image")["bytes"].image.decode())
+df = daft.read_parquet(f"{Path.home()}/wikiart/data/**")
+df = df.with_column("image", col("image")["bytes"].image.decode()).limit(100)
 
 ocr_filter = IntensiveText(max_threshold=0.2)
 
