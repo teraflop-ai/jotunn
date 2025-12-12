@@ -1,6 +1,4 @@
-
 def tagging_prompts(template, tags):
-    
     if template == "intern":
         return f"""
         You must return ONLY the tags from the allowed tag list that truly apply to the image.
