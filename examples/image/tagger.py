@@ -1,8 +1,8 @@
 import daft
 from daft import col
 
-from jotunn.utils.prompt_templates import tagging_prompts
 from jotunn.components.image.tagger import ImageTagger
+from jotunn.utils.prompt_templates import tagging_prompts
 
 df = daft.read_huggingface("huggan/wikiart")
 df = df.with_column("image", col("image")["bytes"].image.decode())

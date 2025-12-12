@@ -227,7 +227,7 @@ def create_vllm_image_tagger_udf(
             max_tokens: int = max_tokens,
             temperature: float = temperature,
             tags: List[str] = tags,
-            max_model_len: int = max_model_len
+            max_model_len: int = max_model_len,
         ):
             if tags:
                 structured_outputs_params = StructuredOutputsParams(
@@ -245,7 +245,9 @@ def create_vllm_image_tagger_udf(
             else:
                 structured_outputs_params = None
 
-            self.vllm_engine = LLM(model=model_name, trust_remote_code=True, max_model_len=max_model_len)
+            self.vllm_engine = LLM(
+                model=model_name, trust_remote_code=True, max_model_len=max_model_len
+            )
             self.sampling_params = SamplingParams(
                 max_tokens=max_tokens,
                 temperature=temperature,
@@ -274,7 +276,7 @@ def create_vllm_image_tagger_udf(
         max_tokens=max_tokens,
         temperature=temperature,
         tags=tags,
-        max_model_len=max_model_len
+        max_model_len=max_model_len,
     )
 
 
