@@ -86,10 +86,14 @@ Qwen Image
     - [] Small Character Filter
     - [x] Image Categorization and Tagging
 - Stage 5
-    - [x] Image Quality Filter - It is unclear whether this is a combination of different heuristics. 
+    - [x] Image Quality Filter - It is unclear whether this is a combination of different heuristics.
+        - [x] [Compression Artifacts Detector](https://huggingface.co/collections/TeraflopAI/compression-detection)
     - [x] Resolution Filter - Same as Stage 1.
     - [x] Aesthetic Filter - Should be improved through a community effort.
     - [] Abnormal Element Filter - Needs to be trained but the data is being collected.
+        - [x] Watermark Detector
+        - [] QR Code Detector
+        - [] Barcode Detector
 - Stage 6
     - [] Face Mosaic Filter
     - [x] Image Categorization and Tagging
