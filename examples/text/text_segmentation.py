@@ -1,6 +1,6 @@
 import daft
 
-from jotunn.components.text.text_segmentation import TextSegmentation
+from jotunn import TextSegmentation
 
 df = daft.from_pydict(
     {

@@ -2,7 +2,7 @@ from pathlib import Path
 
 import daft
 
-from jotunn.components.video.cotracker import Cotracker
+from jotunn import Cotracker
 
 df = daft.from_pydict(
     {

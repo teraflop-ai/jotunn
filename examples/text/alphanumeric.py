@@ -1,6 +1,6 @@
 import daft
 
-from jotunn.components.text.alphanumeric import AlphanumericText
+from jotunn import AlphanumericText
 
 df = daft.from_pydict(
     {

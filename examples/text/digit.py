@@ -1,6 +1,6 @@
 import daft
 
-from jotunn.components.text.digit import Digits
+from jotunn import Digits
 
 df = daft.from_pydict(
     {

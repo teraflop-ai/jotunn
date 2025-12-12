@@ -1,6 +1,8 @@
 from jotunn.components.image import *
+from jotunn.components.text import *
 
 __all__ = [
+    # Image
     "ImageClassifier",
     "AestheticClassifier",
     "Blur",
@@ -23,4 +25,22 @@ __all__ = [
     "Saturation",
     "ImageTagger",
     "OwlWatermarkClassifier",
+    # Text
+    "AlphanumericText",
+    "Digits",
+    "TextEmbedding",
+    "FinewebEduClassifier",
+    "LongWords",
+    "RefusalClassifier",
+    "TextLength",
+    "TextSegmentation",
+    "TokenLength",
+    # Video
+    "Cotracker",
+    "FrameExtractor",
+    "FarnebackOpticalFlow",
+    "VideoDuration",
+    "SceneSegmentation",
+    "VideoStats",
+    "TransNetV2Segmentation",
 ]

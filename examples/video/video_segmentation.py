@@ -3,7 +3,7 @@ from pathlib import Path
 import daft
 from daft import col
 
-from jotunn.components.video.video_segmentation import SceneSegmentation
+from jotunn import SceneSegmentation
 
 df = daft.from_pydict(
     {

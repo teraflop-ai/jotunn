@@ -1,6 +1,6 @@
 import daft
 
-from jotunn.components.text.refusals import RefusalClassifier
+from jotunn import RefusalClassifier
 
 df = daft.from_pydict(
     {

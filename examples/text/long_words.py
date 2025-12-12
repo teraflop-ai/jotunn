@@ -1,6 +1,6 @@
 import daft
 
-from jotunn.components.text.long_words import LongWords
+from jotunn import LongWords
 
 df = daft.from_pydict(
     {

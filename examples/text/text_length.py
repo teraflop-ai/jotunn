@@ -1,6 +1,6 @@
 import daft
 
-from jotunn.components.text.text_length import TextLength
+from jotunn import TextLength
 
 df = daft.from_pydict(
     {

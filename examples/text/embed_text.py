@@ -1,6 +1,6 @@
 import daft
 
-from jotunn.components.text.embedding import TextEmbedding
+from jotunn import TextEmbedding
 
 df = daft.from_pydict(
     {

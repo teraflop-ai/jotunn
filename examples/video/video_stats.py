@@ -1,6 +1,6 @@
 import daft
 
-from jotunn.components.video.video_stats import VideoStats
+from jotunn import VideoStats
 
 df = daft.from_pydict(
     {
