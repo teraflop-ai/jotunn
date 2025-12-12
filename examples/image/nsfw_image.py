@@ -1,7 +1,7 @@
 import daft
 from daft import col
 
-from jotunn.components.image.nsfw import NSFWClassifier
+from jotunn import NSFWClassifier
 
 df = daft.read_huggingface("huggan/wikiart")
 df = df.with_column("image", col("image")["bytes"].image.decode())

@@ -1,7 +1,7 @@
 import daft
 from daft import col
 
-from jotunn.components.image.contrast import Contrast
+from jotunn import Contrast
 
 df = daft.read_huggingface("huggan/wikiart")
 df = df.with_column("image", col("image")["bytes"].image.decode())

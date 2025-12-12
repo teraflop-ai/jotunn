@@ -1,7 +1,7 @@
 import daft
 from daft import col
 
-from jotunn.components.image.file_size import FileSize
+from jotunn import FileSize
 
 df = daft.read_huggingface("huggan/wikiart")
 

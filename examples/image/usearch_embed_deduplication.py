@@ -7,7 +7,7 @@ from daft import col
 from tqdm import tqdm
 from usearch.index import Index
 
-from jotunn.components.image.embedding import ImageEmbedding
+from jotunn import ImageEmbedding
 
 df = daft.read_parquet(f"{Path.home()}/Downloads/train-00000-of-00072.parquet")
 df = df.limit(100)

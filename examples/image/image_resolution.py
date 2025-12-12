@@ -1,7 +1,7 @@
 import daft
 from daft import col
 
-from jotunn.components.image.resolution import Resolution
+from jotunn import Resolution
 
 df = daft.read_huggingface("huggan/wikiart")
 df = df.with_column("image", col("image")["bytes"].image.decode())

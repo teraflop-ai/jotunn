@@ -1,6 +1,6 @@
 import daft
 
-from jotunn.components.image.pdf2image import PDF2Image
+from jotunn import PDF2Image
 
 df = daft.from_pydict(
     {

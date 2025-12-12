@@ -5,7 +5,7 @@ import numpy as np
 from daft import col
 from usearch.index import Index
 
-from jotunn.components.image.image_hashing import ImageHasher
+from jotunn import ImageHasher
 
 df = daft.read_parquet(f"{Path.home()}/Downloads/train-00000-of-00072.parquet")
 df = df.with_column("image", col("image")["bytes"].image.decode())

@@ -3,7 +3,7 @@ from pathlib import Path
 import daft
 from daft import col
 
-from jotunn.components.image.intensive_text import IntensiveText
+from jotunn import IntensiveText
 
 df = daft.read_parquet(f"{Path.home()}/wikiart/data/**")
 df = df.with_column("image", col("image")["bytes"].image.decode()).limit(100)

@@ -3,7 +3,7 @@ from pathlib import Path
 import daft
 from daft import col
 
-from jotunn.components.image.embedding import ImageEmbedding
+from jotunn import ImageEmbedding
 
 df = daft.read_parquet(f"{Path.home()}/wikiart/data/**")
 df = df.with_column("image", col("image")["bytes"].image.decode())

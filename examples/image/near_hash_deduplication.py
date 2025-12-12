@@ -2,7 +2,7 @@ import daft
 from daft import col
 from rapidfuzz.distance import Hamming
 
-from jotunn.components.image.image_hashing import ImageHasher
+from jotunn import ImageHasher
 
 df = daft.from_pydict(
     {

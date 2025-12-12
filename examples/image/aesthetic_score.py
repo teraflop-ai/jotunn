@@ -1,7 +1,7 @@
 import daft
 from daft import col
 
-from jotunn.components.image.aesthetic import AestheticClassifier
+from jotunn import AestheticClassifier
 
 df = daft.read_huggingface("huggan/wikiart")
 df = df.with_column("image", col("image")["bytes"].image.decode())

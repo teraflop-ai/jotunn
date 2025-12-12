@@ -1,7 +1,7 @@
 import daft
 from daft import col
 
-from jotunn.components.image.tagger import ImageTagger
+from jotunn import ImageTagger
 from jotunn.utils.prompt_templates import tagging_prompts
 
 df = daft.read_huggingface("huggan/wikiart")

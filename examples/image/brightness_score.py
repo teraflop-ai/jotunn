@@ -1,7 +1,7 @@
 import daft
 from daft import col
 
-from jotunn.components.image.brightness import Brightness
+from jotunn import Brightness
 
 df = daft.read_huggingface("huggan/wikiart")
 df = df.with_column("image", col("image")["bytes"].image.decode())

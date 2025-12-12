@@ -1,7 +1,7 @@
 import daft
 from daft import col
 
-from jotunn.components.image.rotation import Rotation
+from jotunn import Rotation
 
 df = daft.from_pydict(
     {
