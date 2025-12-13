@@ -1,5 +1,6 @@
 from jotunn.components.image import *
 from jotunn.components.text import *
+from jotunn.components.video import *
 
 __all__ = [
     # Image
@@ -9,6 +10,7 @@ __all__ = [
     "Brightness",
     "VllmImageCaption",
     "Clarity",
+    "Deduplication",
     "Contrast",
     "BatchDecode",
     "ImageEmbedding",

@@ -6,6 +6,7 @@ from .clarity import Clarity
 from .classifier import ImageClassifier
 from .contrast import Contrast
 from .decode import BatchDecode
+from .deduplication import Deduplication
 from .embedding import ImageEmbedding
 from .entropy import Entropy
 from .exposure import Exposure
@@ -29,6 +30,7 @@ __all__ = [
     "VllmImageCaption",
     "Clarity",
     "Contrast",
+    "Deduplication",
     "BatchDecode",
     "ImageEmbedding",
     "Entropy",

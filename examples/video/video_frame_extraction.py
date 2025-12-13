@@ -5,8 +5,7 @@ import cv2
 import daft
 import numpy as np
 
-from jotunn import Resize
-from jotunn import FrameExtractor
+from jotunn import FrameExtractor, Resize
 
 df = daft.from_pydict(
     {
